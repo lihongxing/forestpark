@@ -1,0 +1,16 @@
+<?php return array (
+  'sitename' => '白山森林公园网',
+  'sitenameabbreviat' => 'PARK',
+  'sitetitle' => '',
+  'siteurl' => 'http://127.0.0.15',
+  'sitehost' => 'www.lihongxing.top',
+  'keywords' => '',
+  'description' => '',
+  'icon' => '/attachement/image/admin/2016/09/26/57e8c71fbba77.jpg',
+  'logo' => '/attachement/image/admin/2016/09/26/57e8c6c6b9adc.jpg',
+  'person' => '李红星',
+  'phone' => '15221382805',
+  'qq' => '798161229',
+  'email' => '798161229@qq.com',
+  'address' => '安徽省合肥市肥东县',
+);?>
