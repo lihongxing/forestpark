@@ -49,6 +49,7 @@ class Signup extends Model
         $user->email =$signup['email'];
         $user->head_img = $signup['head_img'];
         $user->mobile = $signup['mobile'];
+        $user->department = $signup['department'];
         $user->setPassword($signup['password']);
         if ($user->save()) {
             return $user;

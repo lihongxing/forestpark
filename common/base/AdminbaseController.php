@@ -99,7 +99,14 @@ class AdminbaseController extends BaseController
         if(parent::beforeAction($action)){
             $actionId = $action->getUniqueId();
             $user = Instance::ensure('user', User::className());
-            if(in_array($actionId, ['rbac/user/login','rbac/user/logout','rbac/user/search','rbac/user/department-form'])){
+            if(in_array($actionId, [
+                'rbac/user/login',
+                'rbac/user/logout',
+                'rbac/user/search',
+                'rbac/user/department-form',
+                'admin/site/welcome',
+                'admin/site/error'
+            ])){
                 return true;
             }
             if ($user->getIsGuest()) {

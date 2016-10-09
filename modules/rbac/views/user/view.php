@@ -50,6 +50,19 @@ $this->title = Yii::t('rbac-admin', 'Useredit');
                                                value="<?= $user->mobile ?>" class="form-control">
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">所属部门</label>
+                                    <div class="col-sm-10 col-xs-12">
+                                        <select name="department" class="form-control" id="department">
+                                            <option value="">请选择所属部门</option>
+                                            <?php if(!empty($departments)){?>
+                                                <?php foreach($departments as $key => $item){?>
+                                                    <option <?php if($user->department == $item['dep_id'] ){echo 'selected';}?> value="<?=$item['dep_id']?>"><?=$item['dep_name']?></option>
+                                                <?php }?>
+                                            <?php }?>
+                                        </select>
+                                    </div>
+                                </div>
                                 <input type="hidden" name="id" value="<?=$user->id?>">
                                 <input type="hidden" name="_csrf" value="<?=yii::$app->request->getCsrfToken()?>">
                                 <div class="form-group">

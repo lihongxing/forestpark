@@ -72,20 +72,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <div class="form-group">
                                     <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">所属部门</label>
                                     <div class="col-sm-10 col-xs-12">
-                                        <div class="input-group">
-                                            <select name="groupid" class="form-control" id="groupid">
-                                                <option value="0">请选择所属部门</option>
-                                                <?php if(!empty($departments)){?>
-                                                    <?php foreach($departments as $key => $item){?>
-                                                        <option value="<?=$item['dep_id']?>"><?=$item['dep_name']?></option>
-                                                    <?php }?>
+                                        <select name="Signup[department]" class="form-control" id="department">
+                                            <option value="">请选择所属部门</option>
+                                            <?php if(!empty($departments)){?>
+                                                <?php foreach($departments as $key => $item){?>
+                                                    <option value="<?=$item['dep_id']?>"><?=$item['dep_name']?></option>
                                                 <?php }?>
-                                            </select>
-                                            <div class="input-group-btn">
-                                                <a class="btn btn-default"><i class="fa fa-plus"></i> 新增部门</a>
-                                            </div>
-                                        </div>
-
+                                            <?php }?>
+                                        </select>
                                     </div>
                                 </div>
                                 <input type="hidden" name="id" value="">
@@ -237,6 +231,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         required: true,
                         equalTo: "#password"
                     },
+                    "Signup[department]": {
+                        required: true,
+                    }
+
                 },
                 messages: {
                     "Signup[username]": {
@@ -263,6 +261,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         required: "请输入确认密码",
                         equalTo: "密码输入不一致",
                     },
+                    "Signup[department]": {
+                        required: "请选择所属的部门",
+                    },
+
                 },
                 errorClass: "has-error",
             });

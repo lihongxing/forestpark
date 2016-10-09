@@ -125,8 +125,13 @@ class UserController extends AdminbaseController
             }
             $user->save();
         }
+        $departmentmodel = new Department();
+        $departments = $departmentmodel->find()
+            ->asArray()
+            ->all();
         return $this->render('view', [
             'user' => $this->findModel($id),
+            'departments' => $departments
         ]);
     }
 
@@ -137,8 +142,13 @@ class UserController extends AdminbaseController
      */
     public function actionProfile($id)
     {
+        $departmentmodel = new Department();
+        $departments = $departmentmodel->find()
+            ->asArray()
+            ->all();
         return $this->render('profile', [
             'user' => $this->findModel($id),
+            'departments' => $departments
         ]);
     }
 
@@ -232,8 +242,7 @@ class UserController extends AdminbaseController
             'mobile' => $post['Signup']['mobile'],
             'head_img' => $post['thumb'],
             'email' => $post['Signup']['email'],
-            'crea' => $post['Signup']['email'],
-
+            'department' => $post['Signup']['department'],
         );
         if(yii::$app->request->isPost){
             if($user = $model->signup($signup)) {
@@ -484,6 +493,7 @@ class UserController extends AdminbaseController
                 'email' => $post['email'],
                 'mobile' => $post['mobile'],
                 'head_img' => $post['thumb'],
+                'department' => $post['department'],
                 'updated_at' => time()
             );
             $condition = 'id = :id';
@@ -670,19 +680,31 @@ class UserController extends AdminbaseController
         if(yii::$app->request->isPost){
             $param_title = yii::$app->request->post('param_title');
             $param_id = yii::$app->request->post('param_id');
-
             $flag = 'error';
             foreach($param_title as $key =>$item){
                 $departmentmodel = new Department();
                 if(!empty($param_id[$key])){
-
+                    $attributes = ['dep_name' => $item];
+                    $condition = 'dep_id = :dep_id';
+                    $params = [':dep_id' => $param_id[$key]];
+                    $count = $departmentmodel->updateAll($attributes, $condition, $params);
+                    if($count > 0){
+                        $flag = 'success';
+                    }
+                }else{
+                    //判断当前部门是否已经存在
+                    $count = $departmentmodel->find()
+                        ->where(['dep_name' => $item])
+                        ->count();
+                    if($count <= 0){
+                        $departmentmodel->setAttribute('dep_name', $item);
+                        $count = $departmentmodel->save();
+                        if($count > 0){
+                            $flag = 'success';
+                        }
+                    }
                 }
-
-                $departmentmodel->setAttribute('dep_name', $item);
-                $departmentmodel->save();
-                $flag = 'success';
             }
-            die;
             if($flag == 'success'){
                 return $this->success('添加成功');
             }else{
