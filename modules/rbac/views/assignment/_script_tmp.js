@@ -21,7 +21,7 @@ $('.btn-assign').click(function () {
     }
     return false;
 });
-$("#add_fieldsrole").on('click','div i',function () {
+$("#add_fields").on('click','div i',function () {
     var data=[];
     element = $(this).parent().parent();
     data.push(element.attr('data-slider-value'));
@@ -34,20 +34,7 @@ $("#add_fieldsrole").on('click','div i',function () {
     }
     return false;
 });
-$("#add_fieldspermission").on('click','div i',function () {
-    var data=[];
-    element = $(this).parent().parent();
-    data.push(element.attr('data-slider-value'));
-    if (data && data.length) {
-        $.post($("#remove").val(), {items: data}, function (r) {
-            updateItems(r);
-        }).always(function () {
-
-        });
-    }
-    return false;
-});
-$("#new_fieldsrole").on('click','div',function () {
+$("#new_fields").on('click','div',function () {
     var data=[];
     data.push($(this).attr('data-slider-value'));
     if (data && data.length) {
@@ -59,29 +46,16 @@ $("#new_fieldsrole").on('click','div',function () {
     }
     return false;
 });
-$("#new_fieldspermission").on('click','div',function () {
-    var data=[];
-    data.push($(this).attr('data-slider-value'));
-    if (data && data.length) {
-        $.post($("#assign").val(), {items: data}, function (r) {
-            updateItems(r);
-        }).always(function () {
 
-        });
-    }
-    return false;
-});
 $('.search[data-target]').keyup(function () {
     search($(this).data('target'));
 });
 
 function search(target) {
     if(target == 'avaliable'){
-        $("#new_fieldsrole").empty();
-        $("#new_fieldspermission").empty();
+        $("#new_fields").empty();
     }else{
-        $("#add_fieldsrole").empty();
-        $("#add_fieldspermission").empty();
+        $("#add_fields").empty();
     }
     var q = $('.search[data-target="' + target + '"]').val();
     var groups = {
@@ -91,9 +65,9 @@ function search(target) {
     $.each(_opts.items[target], function (name, group) {
         if (name.indexOf(q) >= 0) {
             if(target == 'avaliable'){
-                $('<div class="field-item field-item-add" data-subtitle="" data-width="12" data-slider-value="'+name+'" data-title="'+name+'" data-field="couponprice">'+name+' </div>').appendTo($("#new_fields"+group));
+                $('<div class="field-item field-item-add" data-subtitle="" data-width="12" data-slider-value="'+name+'" data-title="'+name+'" data-field="couponprice">'+name+' </div>').appendTo($("#new_fields"));
             }else{
-                $('<div class="field-item field-item-remove" data-slider-value='+name+' data-field="field-item field-item-add" data-title="'+name+'" data-width="12" data-subtitle="">'+name+'<span><i class="fa fa-remove"></i></span><input name="Sqlbackstore[dbname][]" value="'+name+'" type="hidden"> </div>').appendTo($("#add_fields"+group));
+                $('<div class="field-item field-item-remove" data-slider-value='+name+' data-field="field-item field-item-add" data-title="'+name+'" data-width="12" data-subtitle="">'+name+'<span><i class="fa fa-remove"></i></span><input name="Sqlbackstore[dbname][]" value="'+name+'" type="hidden"> </div>').appendTo($("#add_fields"));
             }
         }
     });
