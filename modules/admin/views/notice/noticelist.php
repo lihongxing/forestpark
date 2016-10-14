@@ -32,8 +32,6 @@ $this->title = Yii::t('admin', 'noticemanage');
                                 <button class="btn btn-default" data-original-title="" title=""><i class="fa fa-search"></i> 搜索</button>
                             </div>
                         </div>
-                        <div class="form-group">
-                        </div>
                     </form>
                 </div>
             </div>

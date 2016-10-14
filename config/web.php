@@ -14,14 +14,7 @@ $config = [
             'showScriptName' => false,
             'enablePrettyUrl' => true,
             'suffix' => '.html',
-            'rules' => [
-                // 为路由指定了一个别名
-                'rbuse/in' => 'rbac/user/index',
-                'aduse/in' => 'admin/user/index',
-                'adbdb/in' => 'admin/bdbbackuprestore/index',
-                'rbrol/in' => 'rbac/role/index',
-                'rbrou/in' => 'rbac/route/index',
-            ]
+            'rules' => require(__DIR__ . "/route.php")
         ],
         'request' => [
             'cookieValidationKey' => 'lianqicms',

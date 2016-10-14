@@ -3,7 +3,9 @@
 namespace app\modules\admin\controllers;
 
 use app\common\base\AdminbaseController;
+use app\common\core\GlobalHelper;
 use app\models\Bulletin;
+use app\models\Message;
 use app\modules\rbac\models\User;
 use yii\data\Pagination;
 use yii;
@@ -16,7 +18,7 @@ class BulletinController extends AdminbaseController
     {
         return [
             'error' => [
-                'class' => 'yii\web\ErrorAction',
+                'mes_class' => 'yii\web\ErrorAction',
             ]
         ];
     }
@@ -35,6 +37,9 @@ class BulletinController extends AdminbaseController
                 ['like', 'bul_title', $GET['keyword']],
             ]);
         };
+        if(!empty($GET['id'])){
+            $Bulletinquery = $Bulletinquery->andWhere(['bul_id'  => $GET['id']]);
+        }
         $pages = new Pagination(['totalCount' => $Bulletinquery->count(), 'pageSize' => 10]);
         $bulletins = $Bulletinquery
             ->offset($pages->offset)
@@ -70,6 +75,31 @@ class BulletinController extends AdminbaseController
                 ];
                 $count = $Bulletin->updateAll($attributes, $condition, $params);
                 if($count > 0){
+                    Message::Messagedelete([$post['bul_id']], 'bulletin');
+                    //添加审核人通知
+                    $mes_data = [
+                        'mes_title' => $post["Bulletin"]["bul_title"],
+                        'mes_release_user' => $post['Bulletin']['bul_releaseuser'],
+                        'mes_issuer' => $post['Bulletin']['bul_issuer'],
+                        'mes_sourse_id' => 'bulletin_'.$post['bul_id'],
+                        'mes_template' => 'bulletin_issuer',
+                        'module' => 'bulletin',
+                        'mes_flag' => 1,
+                        'mes_class' => 1,
+                    ];
+                    Message::create($mes_data, 1);
+                    //添加发布人通知
+                    $mes_data = [
+                        'mes_title' => $post["Bulletin"]["bul_title"],
+                        'mes_release_user' => $post['Bulletin']['bul_releaseuser'],
+                        'mes_issuer' => $post['Bulletin']['bul_issuer'],
+                        'mes_sourse_id' => 'bulletin_'.$post['bul_id'],
+                        'mes_template' => 'bulletin_release',
+                        'module' => 'bulletin',
+                        'mes_flag' => 2,
+                        'mes_class' => 2,
+                    ];
+                    Message::create($mes_data, 1);
                     return $this->success('通知通报修改成功',yii\helpers\Url::toRoute('/admin/bulletin/bulletin-list'));
                 }else{
                     return $this->render('bulletinform', [
@@ -93,6 +123,30 @@ class BulletinController extends AdminbaseController
                 $Bulletin->setAttribute('bul_number', date("Y").'〔'.sprintf("%04d", $count+1).'〕');
                 $Bulletin->setAttribute('bul_addtime', $post['Bulletin']['bul_addtime']);
                 if ($Bulletin->save()) {
+                    //添加审核人通知
+                    $mes_data = [
+                        'mes_title' => $post["Bulletin"]["bul_title"],
+                        'mes_release_user' => $post['Bulletin']['bul_releaseuser'],
+                        'mes_issuer' => $post['Bulletin']['bul_issuer'],
+                        'mes_sourse_id' => 'bulletin_'.$Bulletin->primaryKey,
+                        'mes_flag' => 1,
+                        'mes_template' => 'bulletin_issuer',
+                        'module' => 'bulletin',
+                        'mes_class' => 1,
+                    ];
+                    Message::create($mes_data, 1);
+                    //添加发布人通知
+                    $mes_data = [
+                        'mes_title' => $post["Bulletin"]["bul_title"],
+                        'mes_release_user' => $post['Bulletin']['bul_releaseuser'],
+                        'mes_issuer' => $post['Bulletin']['bul_issuer'],
+                        'mes_sourse_id' => 'bulletin_'.$Bulletin->primaryKey,
+                        'mes_flag' => 2,
+                        'mes_template' => 'bulletin_release',
+                        'module' => 'bulletin',
+                        'mes_class' => 2,
+                    ];
+                    Message::create($mes_data, 1);
                     return $this->success('通知通报添加成功',yii\helpers\Url::toRoute('/admin/bulletin/bulletin-list'));
                 } else {
                     return $this->render('bulletinform', [
@@ -143,6 +197,7 @@ class BulletinController extends AdminbaseController
         switch($type){
             case 1:
                 $bul_id = yii::$app->request->post('bul_id');
+                $bul_ids = [$bul_id];
                 if(!empty($bul_id)){
                     $menumodel = $Bulletin->find()
                         ->where(['bul_id' => $bul_id])
@@ -171,6 +226,11 @@ class BulletinController extends AdminbaseController
                 }
                 break;
             case 3:
+                $bul_ids_tmp = $Bulletin->find()->select('bul_id')->asArray()->all();
+                $bul_ids = array();
+                foreach($bul_ids_tmp as $item){
+                    array_push($bul_ids, $item['bul_id']);
+                }
                 $count = $Bulletin->deleteAll();
                 if($count > 0 ){
                     $message['status'] = 100;
@@ -179,6 +239,7 @@ class BulletinController extends AdminbaseController
                 }
                 break;
         }
+        Message::Messagedelete($bul_ids, 'bulletin');
         return $this->ajaxReturn(json_encode($message));
 
     }
@@ -195,7 +256,6 @@ class BulletinController extends AdminbaseController
         //判断当前审核人是否微通知通报签发人
         $Bulletin = new Bulletin();
         $bulletininfo = $Bulletin->find()
-            ->select(['bul_issuer'])
             ->where(['bul_id' => $bul_id])
             ->asArray()
             ->one();
@@ -206,6 +266,32 @@ class BulletinController extends AdminbaseController
                 $params = [':bul_id' => $bul_id];
                 $count = $Bulletin->updateAll($attributes, $condition, $params);
                 if($count > 0){
+                    //修改审核消息的状态
+                    Message::updatestatus('bulletin_'.$bul_id, 'true', yii::$app->user->id, $bulletininfo['bul_releaseuser']);
+                    //添加审核通知
+                    $mes_data = [
+                        'mes_title' =>$bulletininfo["bul_title"],
+                        'mes_release_user' => $bulletininfo['bul_releaseuser'],
+                        'mes_issuer' => $bulletininfo['bul_issuer'],
+                        'mes_sourse_id' => 'bulletin_'.$bulletininfo['bul_id'],
+                        'mes_flag' => 3,
+                        'mes_template' => 'bulletin_examinerelease',
+                        'module' => 'bulletin',
+                        'mes_class' => 2,
+                    ];
+                    Message::create($mes_data, 1);
+                    //添加审核通知
+                    $mes_data = [
+                        'mes_title' =>$bulletininfo["bul_title"],
+                        'mes_release_user' => $bulletininfo['bul_releaseuser'],
+                        'mes_issuer' => $bulletininfo['bul_issuer'],
+                        'mes_sourse_id' => 'bulletin_'.$bulletininfo['bul_id'],
+                        'mes_flag' => 4,
+                        'mes_template' => 'bulletin_examineissuer',
+                        'module' => 'bulletin',
+                        'mes_class' => 2,
+                    ];
+                    Message::create($mes_data, 1);
                     $message['status'] = 100;
                 }else{
                     $message['status'] = 101;

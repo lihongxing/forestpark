@@ -19,12 +19,12 @@ use yii\helpers\Url;
         <div class="col-md-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#activity" data-toggle="tab">基本信息设置</a></li>
+                    <li <?php if($flag == 'profile'){?>class="active"<?php }?>><a href="#activity" data-toggle="tab">基本信息设置</a></li>
                     <li><a href="#timeline" data-toggle="tab">密码修改</a></li>
-                    <li><a href="#settings" data-toggle="tab">信息查询</a></li>
+                    <li <?php if($flag == 'message'){?>class="active"<?php }?>><a href="#settings" data-toggle="tab">信息查询</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div class="active tab-pane" id="activity">
+                    <div class="<?php if($flag == 'profile'){?>active<?php }?> tab-pane" id="activity">
                         <form class="form-horizontal" method="post" id="userupdata" action="<?=Url::toRoute('/rbac/user/updata')?>">
                             <div class="box-body">
                                 <div class="form-group">
@@ -117,7 +117,38 @@ use yii\helpers\Url;
                         </form>
                     </div>
                     <!-- /.tab-pane -->
-                    <div class="tab-pane" id="settings">
+                    <div class="<?php if($flag == 'message'){?>active<?php }?> tab-pane" id="settings">
+                        <div class="tab-pane active" id="timeline">
+                            <ul class="timeline timeline-inverse">
+                                <li class="time-label">
+                                    <span class="bg-red">
+                                      <?=date('Y年m月d日')?>
+                                    </span>
+                                </li>
+                                <?php if(!empty($messages)){?>
+                                    <?php foreach($messages as $key => $item){?>
+                                        <li>
+                                            <i class="fa fa-envelope bg-blue"></i>
+                                            <div class="timeline-item">
+                                                <span class="time"><i class="fa fa-clock-o"></i> <?=$item['mes_addtime']?></span>
+
+                                                <h3 class="timeline-header"><a href="#"><?=$item['release_user']['username']?></a> 发送你一条消息</h3>
+                                                <div class="timeline-body">
+                                                    <?=$item['mes_title']?>
+                                                </div>
+                                                <div class="timeline-footer">
+                                                    <a class="btn btn-primary btn-xs" onclick="showmessage(<?=$item['mes_id']?>);">点击 查看</a>
+                                                    <a class="btn btn-danger btn-xs">删除</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    <?php }?>
+                                <?php }?>
+                                <li>
+                                    <i class="fa fa-clock-o bg-gray"></i>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <!-- /.tab-pane -->
                 </div>

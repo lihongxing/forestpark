@@ -362,5 +362,44 @@ class GlobalHelper
         @readfile($filename);//输出文件;
         unlink($filename);
     }
+
+
+    static function format_date_distance_now($time){
+        $t=time()-strtotime($time);
+        if($t>0){$ba = '前';}else{$ba = '后';}
+        $f=array(
+            '31536000'=>'年',
+            '2592000'=>'个月',
+            '604800'=>'星期',
+            '86400'=>'天',
+            '3600'=>'小时',
+            '60'=>'分钟',
+            '1'=>'秒'
+        );
+
+        foreach ($f as $k=>$v) {
+            if (0 !=$c=floor(abs($t)/(int)$k)) {
+                return $c.$v.$ba;
+            }
+        }
+    }
+
+
+    static function array_sort($array, $keys, $type='asc'){
+        $keysvalue = $new_array = array();
+        foreach ($array as $k=>$v){
+            $keysvalue[$k] = $v[$keys];
+        }
+        if($type == 'asc'){
+            asort($keysvalue);
+        }else{
+            arsort($keysvalue);
+        }
+        reset($keysvalue);
+        foreach ($keysvalue as $k=>$v){
+            $new_array[$k] = $array[$k];
+        }
+        return $new_array;
+    }
 }
 ?>

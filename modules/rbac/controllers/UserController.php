@@ -4,6 +4,7 @@ namespace app\modules\rbac\controllers;
 
 use app\common\base\AdminbaseController;
 use app\models\Department;
+use app\models\Message;
 use app\modules\rbac\models\Assignment;
 use app\modules\rbac\models\form\NodeForm;
 use Yii;
@@ -142,13 +143,22 @@ class UserController extends AdminbaseController
      */
     public function actionProfile($id)
     {
+        $flag = yii::$app->request->get('flag');
         $departmentmodel = new Department();
+        //获取全部部门信息
         $departments = $departmentmodel->find()
             ->asArray()
             ->all();
+        //获取所有站内信息
+        $Messagemodel = new Message();
+        $results = $Messagemodel->getMessageList();
         return $this->render('profile', [
             'user' => $this->findModel($id),
-            'departments' => $departments
+            'messages' => $results['messages'],
+            'departments' => $departments,
+            'count1' => $results['count1'],
+            'count2' => $results['count2'],
+            'flag' => $flag,
         ]);
     }
 

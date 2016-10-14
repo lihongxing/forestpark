@@ -105,7 +105,7 @@ class AdminbaseController extends BaseController
                 'rbac/user/search',
                 'rbac/user/department-form',
                 'admin/site/welcome',
-                'admin/site/error'
+                'admin/site/error',
             ])){
                 return true;
             }

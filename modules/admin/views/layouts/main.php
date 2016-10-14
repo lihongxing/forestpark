@@ -39,10 +39,7 @@ if (Yii::$app->controller->action->id === 'login') {
     <body class="hold-transition skin-blue sidebar-mini">
     <?php $this->beginBody() ?>
     <div class="wrapper">
-        <?= $this->render(
-            'header.php',
-            ['directoryAsset' => $directoryAsset]
-        ) ?>
+        <?= \app\modules\admin\widgets\Messages::widget() ?>
 
         <?= $this->render(
             'left.php',
