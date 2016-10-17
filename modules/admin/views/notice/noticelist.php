@@ -16,8 +16,10 @@ $this->title = Yii::t('admin', 'noticemanage');
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
-            <div class="panel panel-info">
-                <div class="panel-heading">筛选</div>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><?=$this->title?></h3>
+                </div>
                 <div class="panel-body">
                     <form id="form1" role="form" class="form-horizontal" method="get" action="<?=Url::toRoute('/admin/notice/notice-list')?>">
                         <div class="form-group">
@@ -33,12 +35,6 @@ $this->title = Yii::t('admin', 'noticemanage');
                             </div>
                         </div>
                     </form>
-                </div>
-            </div>
-
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><?=$this->title?></h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">

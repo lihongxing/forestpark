@@ -17,48 +17,42 @@ $this->title = Yii::t('admin', 'dbbackuprestorelist');
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
-            <div class="panel panel-info">
-                <div class="panel-heading">筛选</div>
-                <div class="panel-body">
-                    <form id="form1" role="form" class="form-horizontal" method="get" action="<?=Url::toRoute('/admin/bdbbackuprestore/index')?>">
-                        <div class="form-group">
-                            <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">备份信息</label>
-                            <div class="col-sm-8 col-lg-9 col-xs-12">
-                                <input type="text" placeholder="可搜索表名称,描述" value="<?=$GET['name']?>" name="keyword" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">备份时间</label>
-                            <div class="col-sm-2">
-                                <label class="radio-inline">
-                                    <input type="radio" name="searchtime"  <?php if($GET['searchtime'] == 0){?> checked <?php }?> value="0">不搜索
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="searchtime" <?php if($GET['searchtime'] == 1){?> checked <?php }?> value="1">搜索
-                                </label>
-                            </div>
-                            <div class="col-sm-7 col-lg-9 col-xs-12">
-                                <?= \xiaohei\widgetform\FormWidget::widget(['name' => 'time', 'value' => array('starttime'=>date('Y-m-d H:i', time()),'endtime'=>date('Y-m-d  H:i', time())), 'default' => false ,'options' => array()]) ?>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label"></label>
-                            <div class="col-sm-7 col-lg-9 col-xs-12">
-                                <button class="btn btn-default" data-original-title="" title=""><i class="fa fa-search"></i> 搜索</button>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="box">
+            <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title"><?=Yii::t('admin', 'dbbackuprestorelist');?></h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
+                    <div class="panel-body">
+                        <form id="form1" role="form" class="form-horizontal" method="get" action="<?=Url::toRoute('/admin/bdbbackuprestore/index')?>">
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">备份信息</label>
+                                <div class="col-sm-8 col-lg-9 col-xs-12">
+                                    <input type="text" placeholder="可搜索表名称,描述" value="<?=$GET['name']?>" name="keyword" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">备份时间</label>
+                                <div class="col-sm-2">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="searchtime"  <?php if($GET['searchtime'] == 0){?> checked <?php }?> value="0">不搜索
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="searchtime" <?php if($GET['searchtime'] == 1){?> checked <?php }?> value="1">搜索
+                                    </label>
+                                </div>
+                                <div class="col-sm-7 col-lg-9 col-xs-12">
+                                    <?= \xiaohei\widgetform\FormWidget::widget(['name' => 'time', 'type' => 'time', 'value' => array('starttime'=>date('Y-m-d H:i', time()),'endtime'=>date('Y-m-d  H:i', time())), 'default' => false ,'options' => array()]) ?>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label"></label>
+                                <div class="col-sm-7 col-lg-9 col-xs-12">
+                                    <button class="btn btn-default" data-original-title="" title=""><i class="fa fa-search"></i> 搜索</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <table class="table table-bordered">
                         <tbody>
                         <tr>

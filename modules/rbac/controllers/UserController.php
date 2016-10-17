@@ -253,6 +253,7 @@ class UserController extends AdminbaseController
             'head_img' => $post['thumb'],
             'email' => $post['Signup']['email'],
             'department' => $post['Signup']['department'],
+            'color' => $post['Signup']['color'],
         );
         if(yii::$app->request->isPost){
             if($user = $model->signup($signup)) {
@@ -504,6 +505,7 @@ class UserController extends AdminbaseController
                 'mobile' => $post['mobile'],
                 'head_img' => $post['thumb'],
                 'department' => $post['department'],
+                'color' => $post['color'],
                 'updated_at' => time()
             );
             $condition = 'id = :id';

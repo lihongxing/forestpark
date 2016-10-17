@@ -1,6 +1,7 @@
 <?php
 $this->title = Yii::t('rbac-admin', 'Useredit');
 ?>
+<link rel="stylesheet" href="/admin/plugins/colorpicker/bootstrap-colorpicker.min.css">
 <link href="/api/bootstrapswitch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet">
 <script src="/api/bootstrapswitch/dist/js/bootstrap-switch.min.js"></script>
 <style>
@@ -48,6 +49,13 @@ $this->title = Yii::t('rbac-admin', 'Useredit');
                                     <div class="col-sm-10">
                                         <input type="text" placeholder="请输入手机号码" id="mobile" name="mobile"
                                                value="<?= $user->mobile ?>" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="inputPassword">颜色</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="text" name="color" id="color" class="form-control my-colorpicker1" value="<?= $user->color ?>">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -114,11 +122,13 @@ $this->title = Yii::t('rbac-admin', 'Useredit');
             </div>
         </div>
 </section>
+<script src="/admin/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 <script type="text/javascript">
     $(function (argument) {
         $('[name="userstatus"]').bootstrapSwitch();
     })
     $().ready(function () {
+        $(".my-colorpicker1").colorpicker();
         require(["validation", "validation-methods"], function (validate) {
             $("#passwordreset").validate({
                 rules: {
@@ -161,7 +171,10 @@ $this->title = Yii::t('rbac-admin', 'Useredit');
                     "mobile": {
                         required: true,
                         isMobile: true,
-                    }
+                    },
+                    "color": {
+                        required: true,
+                    },
                 },
                 messages: {
                     "username": {
@@ -174,7 +187,10 @@ $this->title = Yii::t('rbac-admin', 'Useredit');
                     "mobile": {
                         required: "请输入手机号码",
                         isMobile: "请输入正确的手机号码",
-                    }
+                    },
+                    "color": {
+                        required: '请选择颜色',
+                    },
                 },
                 errorClass: "has-error",
             });

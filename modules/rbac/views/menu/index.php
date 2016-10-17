@@ -67,40 +67,36 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div><!-- /.col -->
         <div class="col-md-9">
-            <div class="panel panel-info">
-                <div class="panel-heading">筛选</div>
-                <div class="panel-body">
-                    <form role="form" class="form-horizontal" method="get" action="<?=Url::toRoute('/rbac/menu/index')?>">
-                        <input type="hidden" value="-1" name="status">
-                        <div class="form-group">
-                            <label class="col-xs-12 col-sm-3 col-md-4 col-lg-2 control-label">状态</label>
-                            <div class="col-sm-8 col-lg-9 col-xs-12">
-                                <div class="btn-group">
-                                    <a class="btn <?php if($status == -1){?>btn-primary <?php }else{?>btn-default<?php }?>" href="<?=Url::toRoute(['/rbac/menu/index','status' => -1])?>">所有</a>
-                                    <a class="btn <?php if($status == 1){?>btn-primary <?php }else{?>btn-default<?php }?>" href="<?=Url::toRoute(['/rbac/menu/index','status' => 1])?>">显示</a>
-                                    <a class="btn <?php if($status == 0){?>btn-primary <?php }else{?>btn-default<?php }?>" href="<?=Url::toRoute(['/rbac/menu/index','status' => 0])?>">隐藏</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-12 col-sm-3 col-md-4 col-lg-2 control-label">菜单名称</label>
-                            <div class="col-sm-8 col-xs-12">
-                                <input type="text" value="" id="name" name="name" class="form-control">
-                            </div>
-                            <div class="col-xs-12 col-sm-3 col-lg-1 text-right">
-                                <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="box">
+            <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title"><?=$this->title;?></h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
+                    <div class="panel-body">
+                        <form role="form" class="form-horizontal" method="get" action="<?=Url::toRoute('/rbac/menu/index')?>">
+                            <input type="hidden" value="-1" name="status">
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-3 col-md-4 col-lg-2 control-label">状态</label>
+                                <div class="col-sm-8 col-lg-9 col-xs-12">
+                                    <div class="btn-group">
+                                        <a class="btn <?php if($status == -1){?>btn-primary <?php }else{?>btn-default<?php }?>" href="<?=Url::toRoute(['/rbac/menu/index','status' => -1])?>">所有</a>
+                                        <a class="btn <?php if($status == 1){?>btn-primary <?php }else{?>btn-default<?php }?>" href="<?=Url::toRoute(['/rbac/menu/index','status' => 1])?>">显示</a>
+                                        <a class="btn <?php if($status == 0){?>btn-primary <?php }else{?>btn-default<?php }?>" href="<?=Url::toRoute(['/rbac/menu/index','status' => 0])?>">隐藏</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-3 col-md-4 col-lg-2 control-label">菜单名称</label>
+                                <div class="col-sm-8 col-xs-12">
+                                    <input type="text" value="" id="name" name="name" class="form-control">
+                                </div>
+                                <div class="col-xs-12 col-sm-3 col-lg-1 text-right">
+                                    <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <table class="table table-bordered">
                         <tbody>
                         <tr>

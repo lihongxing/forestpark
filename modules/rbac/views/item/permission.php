@@ -15,43 +15,40 @@ unset($rules[RouteRule::RULE_NAME]);
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
-            <form class="form form-horizontal" method="get" action="<?=Url::toRoute('/rbac/permission/index')?>">
-                <div class="panel panel-info">
-                    <div class="panel-heading">筛选</div>
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">权限名称</label>
-                            <div class="col-xs-12 col-sm-8 col-lg-9">
-                                <input type="text" placeholder="权限名称" value="" id="" name="name" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">按时间</label>
-                            <div class="col-sm-2">
-                                <select class="form-control" name="searchtime">
-                                    <option selected="" value="">不搜索</option>
-                                    <option value="1">搜索</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-7 col-lg-9 col-xs-12">
-                                <?= \xiaohei\widgetform\FormWidget::widget(['name' => 'time', 'value' => array('starttime'=>date('Y-m-d H:i', time()),'endtime'=>date('Y-m-d  H:i', time())), 'default' => false ,'options' => array()]) ?>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label"> </label>
-                            <div class="col-xs-12 col-sm-2 col-lg-2">
-                                <button class="btn btn-default" data-original-title="" title=""><i class="fa fa-search"></i> 搜索</button>
-                            </div>
-                        </div>
-                    </div>
-                </div></form>
-
-            <div class="box">
+            <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title"><?= $this->title ?></h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
+                    <div class="panel-body">
+                        <form class="form form-horizontal" method="get" action="<?=Url::toRoute('/rbac/permission/index')?>">
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">权限名称</label>
+                                <div class="col-xs-12 col-sm-8 col-lg-9">
+                                    <input type="text" placeholder="权限名称" value="<?=$name?>" id="" name="name" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">按时间</label>
+                                <div class="col-sm-2">
+                                    <select class="form-control" name="searchtime">
+                                        <option <?php if($searchtime == ''){?>selected="" <?php }?>value="">不搜索</option>
+                                        <option <?php if($searchtime == 1){?>selected="" <?php }?>value="1">搜索</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-7 col-lg-9 col-xs-12">
+                                    <?= \xiaohei\widgetform\FormWidget::widget(['name' => 'time', 'type' => 'time', 'value' => array('starttime' => empty($time['start']) ? date('Y-m-d H:i', time()) : $time['start'],'endtime' => empty($time['end']) ? date('Y-m-d  H:i', time()) : $time['end']), 'default' => false ,'options' => array()]) ?>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label"> </label>
+                                <div class="col-xs-12 col-sm-2 col-lg-2">
+                                    <button class="btn btn-default" data-original-title="" title=""><i class="fa fa-search"></i> 搜索</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <table class="table table-bordered">
                         <tbody>
                         <tr>

@@ -21,12 +21,11 @@ if (Yii::$app->controller->action->id === 'login') {
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
-        <script src="/resource/js/require.js"></script>
-        <script src="/resource/js/app/config.js"></script>
         <script src="/resource/js/lib/jquery-1.11.1.min.js"></script>
+        <link rel="stylesheet" href="/admin/plugins/select2/select2.min.css">
         <link rel="stylesheet" href="/admin/dist/css/AdminLTE.min.css">
         <link rel="stylesheet" href="/admin/bootstrap/css/bootstrap.min.css">
-        <script>require(['bootstrap']);</script>
+        <script src="/admin/bootstrap/js/bootstrap.min.js"></script>
         <link href="/resource/css/common.css" rel="stylesheet">
         <link rel="shortcut icon" href="<?=yii::$app->params['siteinfo']['siteurl'].'/'.yii::$app->params['siteinfo']['icon']?>">
         <link rel="stylesheet" href="/api/artDialog/css/ui-dialog.css">

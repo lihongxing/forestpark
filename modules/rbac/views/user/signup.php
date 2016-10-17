@@ -6,6 +6,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <script src="/resource/js/lib/jquery-ui-1.10.3.min.js"></script>
 <script language="javascript" src="/api/nestable/jquery.nestable.js"></script>
+<link rel="stylesheet" href="/admin/plugins/colorpicker/bootstrap-colorpicker.min.css">
 <link rel="stylesheet" type="text/css" href="/api/nestable/nestable.css"/>
 <style>
     .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
@@ -67,6 +68,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <div class="col-sm-10">
                                         <input type="password" name="Signup[retypePassword]" placeholder="请再次输入新密码" id="password1"
                                                class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="inputPassword">颜色</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="text" name="Signup[color]" id="color" class="form-control my-colorpicker1">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -177,9 +185,10 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
 </section>
-
+<script src="/admin/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 <script type="text/javascript">
     $().ready(function () {
+        $(".my-colorpicker1").colorpicker();
         require(["validation", "validation-methods"], function (validate) {
             $("#signup").validate({
                 ignore: ".ignore",
@@ -231,6 +240,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         required: true,
                         equalTo: "#password"
                     },
+                    "Signup[color]": {
+                        required: true,
+                    },
                     "Signup[department]": {
                         required: true,
                     }
@@ -260,6 +272,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     "Signup[retypePassword]": {
                         required: "请输入确认密码",
                         equalTo: "密码输入不一致",
+                    },
+                    "Signup[color]": {
+                        required: '请选择颜色',
                     },
                     "Signup[department]": {
                         required: "请选择所属的部门",

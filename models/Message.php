@@ -189,7 +189,7 @@ class Message extends \yii\db\ActiveRecord
             ->asArray()
             ->all();
         $message1s = Message::find()
-            ->where(['mes_type' => 1, 'mes_issuer' => \Yii::$app->user->id, 'mes_status' => 1])
+            ->where(['mes_type' => 1, 'mes_issuer' => \Yii::$app->user->id])
             ->orderBy('mes_addtime DESC')
             ->asArray()
             ->all();
@@ -197,7 +197,7 @@ class Message extends \yii\db\ActiveRecord
             ->where(['mes_type' => 2, 'mes_status' => 3])
             ->count();
         $count2 = Message::find()
-            ->where(['mes_type' => 1, 'mes_issuer' => \Yii::$app->user->id, 'mes_status' => 1])
+            ->where(['mes_type' => 1, 'mes_issuer' => \Yii::$app->user->id])
             ->count();
         if(empty($nums)){
             $messages = array_slice(GlobalHelper::array_sort(array_merge($message2s,$message1s), 'mes_addtime', 'desc'), 0);

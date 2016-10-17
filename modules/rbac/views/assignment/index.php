@@ -17,8 +17,10 @@ $this->title = Yii::t('rbac-admin', 'Users');
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
-            <div class="panel panel-info">
-                <div class="panel-heading">筛选</div>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><?=Yii::t('rbac-admin', 'Users');?></h3>
+                </div>
                 <div class="panel-body">
                     <form id="form1" role="form" class="form-horizontal" method="get" action="<?=Url::toRoute('/rbac/assignment/index')?>">
                         <div class="form-group">
@@ -49,7 +51,6 @@ $this->title = Yii::t('rbac-admin', 'Users');
                                     <?php }?>
                                 </select>
                             </div>
-
                         </div>
                         <div class="form-group">
                             <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">添加时间</label>
@@ -62,7 +63,7 @@ $this->title = Yii::t('rbac-admin', 'Users');
                                 </label>
                             </div>
                             <div class="col-sm-7 col-lg-9 col-xs-12">
-                                <?= \xiaohei\widgetform\FormWidget::widget(['name' => 'time', 'value' => array('starttime'=>date('Y-m-d H:i', time()),'endtime'=>date('Y-m-d  H:i', time())), 'default' => false ,'options' => array()]) ?>
+                                <?= \xiaohei\widgetform\FormWidget::widget(['name' => 'time', 'type' => 'time', 'value' => array('starttime'=>date('Y-m-d H:i', time()),'endtime'=>date('Y-m-d  H:i', time())), 'default' => false ,'options' => array()]) ?>
                             </div>
                         </div>
                         <div class="form-group">
@@ -71,15 +72,7 @@ $this->title = Yii::t('rbac-admin', 'Users');
                                 <button class="btn btn-default" data-original-title="" title=""><i class="fa fa-search"></i> 搜索</button>
                             </div>
                         </div>
-                        <div class="form-group">
-                        </div>
                     </form>
-                </div>
-            </div>
-
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><?=Yii::t('rbac-admin', 'Users');?></h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">

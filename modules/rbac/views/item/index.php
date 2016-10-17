@@ -18,29 +18,25 @@ unset($rules[RouteRule::RULE_NAME]);
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
-            <div class="panel panel-info">
-                <div class="panel-heading">筛选</div>
-                <div class="panel-body">
-                    <form role="form" class="form-horizontal" method="get" action="<?=Url::toRoute('/rbac/role/index')?>">
-                        <div class="form-group">
-                            <label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">角色名称</label>
-                            <div class="col-sm-6 col-lg-8 col-xs-12">
-                                <input type="text" placeholder="请输入角色名称" value="" class="form-control" name="name">
-                            </div>
-                            <div class="pull-right col-xs-12 col-sm-3 col-lg-2">
-                                <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="box">
+            <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title"><?= $this->title ?></h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
+                    <div class="panel-body">
+                        <form role="form" class="form-horizontal" method="get" action="<?=Url::toRoute('/rbac/role/index')?>">
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-3 col-md-2 col-lg-2 control-label">角色名称</label>
+                                <div class="col-sm-6 col-lg-8 col-xs-12">
+                                    <input type="text" placeholder="请输入角色名称" value="<?=$name?>" class="form-control" name="name">
+                                </div>
+                                <div class="pull-right col-xs-12 col-sm-3 col-lg-2">
+                                    <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <table class="table table-bordered">
                         <tbody>
                         <tr>

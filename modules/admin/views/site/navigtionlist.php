@@ -16,34 +16,28 @@ $this->title = Yii::t('admin', 'navigtionmanage');
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
-            <div class="panel panel-info">
-                <div class="panel-heading">筛选</div>
-                <div class="panel-body">
-                    <form id="form1" role="form" class="form-horizontal" method="get" action="<?=Url::toRoute('/admin/site/navigtion-list')?>">
-                        <div class="form-group">
-                            <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">导航信息</label>
-                            <div class="col-sm-8 col-lg-9 col-xs-12">
-                                <input type="text" placeholder="可搜索导航名称,标题" value="<?=$GET['keyword']?>" name="keyword" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label"></label>
-                            <div class="col-sm-7 col-lg-9 col-xs-12">
-                                <button class="btn btn-default" data-original-title="" title=""><i class="fa fa-search"></i> 搜索</button>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="box">
+            <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title"><?=$this->title?></h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
+                    <div class="panel-body">
+                        <form id="form1" role="form" class="form-horizontal" method="get" action="<?=Url::toRoute('/admin/site/navigtion-list')?>">
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label">导航信息</label>
+                                <div class="col-sm-8 col-lg-9 col-xs-12">
+                                    <input type="text" placeholder="可搜索导航名称,标题" value="<?=$GET['keyword']?>" name="keyword" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-2 col-md-2 col-lg-1 control-label"></label>
+                                <div class="col-sm-7 col-lg-9 col-xs-12">
+                                    <button class="btn btn-default" data-original-title="" title=""><i class="fa fa-search"></i> 搜索</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <table class="table table-bordered">
                         <tbody>
                         <tr>

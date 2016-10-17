@@ -110,14 +110,14 @@ class NodeForm extends Model
     public function getPermissions($type, $name = '', $time = '')
     {
         $where = ['type' => $type];
-        if(!empty($name)){
-           $where['name'] = $name;
-        }
         $search= '/';
         $query = (new Query())
             ->from($this->itemTable)
             ->where($where)
             ->andWhere(['not like', 'name', $search]);
+        if(!empty($name)){
+            $query = $query->andWhere(['like', 'name', $name]);
+        }
         if(!empty($time)){
             $query = $query->andWhere(['between','updated_at', strtotime($time['start']),strtotime($time['end'])]);
         }

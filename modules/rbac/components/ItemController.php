@@ -55,6 +55,9 @@ class ItemController extends AdminbaseController
         }
         $Nodeform = new NodeForm();
         $return = $Nodeform->getPermissions($this->type, $name, $time);
+        $return['name'] = $name;
+        $return['time'] = $time;
+        $return['searchtime'] = $searchtime;
         if($this->type == 1){
             return $this->render('index',$return);
         }else{
