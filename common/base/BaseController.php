@@ -9,8 +9,12 @@ class BaseController extends Controller
     private $_successWait = 2;
     //成功信息的跳转时间
     private $_errorWait = 3;
+
     //失败信息的跳转时间
-    function init(){}
+    function init()
+    {
+    }
+
     /**
      * 操作错误跳转的快捷方法
      * @access protected
@@ -19,7 +23,9 @@ class BaseController extends Controller
      * @param mixed $ajax 是否为Ajax方式 当数字时指定跳转时间
      * @return void
      */
-    function error($message = '', $jumpUrl = '', $ajax = false){}
+    function error($message = '', $jumpUrl = '', $ajax = false)
+    {
+    }
 
     /**
      * 操作成功跳转的快捷方法
@@ -29,7 +35,9 @@ class BaseController extends Controller
      * @param mixed $ajax 是否为Ajax方式 当数字时指定跳转时间
      * @return void
      */
-    function success($message = '', $jumpUrl = '', $ajax = false){}
+    function success($message = '', $jumpUrl = '', $ajax = false)
+    {
+    }
 
     /**
      * 默认跳转操作 支持错误导向和正确跳转
@@ -42,7 +50,9 @@ class BaseController extends Controller
      * @access private
      * @return void
      */
-    function dispatchJump($message, $status = 1, $jumpUrl = '', $ajax = false){}
+    function dispatchJump($message, $status = 1, $jumpUrl = '', $ajax = false)
+    {
+    }
 
     /**
      * Ajax方式返回数据到客户端
@@ -78,11 +88,12 @@ class BaseController extends Controller
      * @param string $root 根节点名
      * @param string $item 数字索引的子节点名
      * @param string $attr 根节点属性
-     * @param string $id   数字索引子节点key转换的属性名
+     * @param string $id 数字索引子节点key转换的属性名
      * @param string $encoding 数据编码
      * @return string
      */
-    function xml_encode($data, $root = 'root', $item = 'item', $attr = '', $id = 'id', $encoding = 'utf-8') {
+    function xml_encode($data, $root = 'root', $item = 'item', $attr = '', $id = 'id', $encoding = 'utf-8')
+    {
         if (is_array($attr)) {
             $_attr = array();
             foreach ($attr as $key => $value) {
@@ -101,12 +112,13 @@ class BaseController extends Controller
 
     /**
      * 数据XML编码
-     * @param mixed  $data 数据
+     * @param mixed $data 数据
      * @param string $item 数字索引时的节点名称
-     * @param string $id   数字索引key转换为的属性名
+     * @param string $id 数字索引key转换为的属性名
      * @return string
      */
-    function data_to_xml($data, $item = 'item', $id = 'id') {
+    function data_to_xml($data, $item = 'item', $id = 'id')
+    {
         $xml = $attr = '';
         foreach ($data as $key => $val) {
             if (is_numeric($key)) {
@@ -119,31 +131,35 @@ class BaseController extends Controller
         }
         return $xml;
     }
-    //渲染模板
-    function renderself($data){}
 
-    public function __set($name, $value) 
+    //渲染模板
+    function renderself($data)
+    {
+    }
+
+    public function __set($name, $value)
     {
         $setter = 'set' . $name;
         if (method_exists($this, $setter))
-        return $this->$setter($value);
+            return $this->$setter($value);
     }
 
-    public function __get($name) 
+    public function __get($name)
     {
         $getter = 'get' . $name;
         if (method_exists($this, $getter))
             return $this->$getter();
     }
 
-    function setSuccessWait($value) 
+    function setSuccessWait($value)
     {
-        $this->_successWait = (int) $value;
+        $this->_successWait = (int)$value;
     }
 
     function setErrorWait($value)
     {
-        $this->_errorWait = (int) $value;
+        $this->_errorWait = (int)$value;
     }
 }
+
 ?>

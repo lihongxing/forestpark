@@ -6,7 +6,7 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'language' =>'zh-CN',//默认使用中文
+    'language' => 'zh-CN',//默认使用中文
     'components' => [
         // 路由的配置
         'urlManager' => [
@@ -22,7 +22,7 @@ $config = [
         // membercache缓存配置
         'membercache' => array(
             'class' => 'yii\caching\MemCache',
-            'servers'=>array(
+            'servers' => array(
                 array(
                     'host' => '127.0.0.1',
                     'port' => 11211,
@@ -83,19 +83,19 @@ $config = [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error'],
-                    'logFile' => '@app/runtime/logs/'.date("Ymd", time()) . 'error.log',
+                    'logFile' => '@app/runtime/logs/' . date("Ymd", time()) . 'error.log',
                 ],
                 [
                     'class' => 'yii\log\FileTarget',
                     'categories' => ['info'],
-                    'logFile' => '@app/runtime/logs/'.date("Ymd", time()) . 'info.log',
+                    'logFile' => '@app/runtime/logs/' . date("Ymd", time()) . 'info.log',
                     'maxFileSize' => 1024 * 2,
                     'maxLogFiles' => 20,
                 ],
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['warning'],
-                    'logFile' => '@app/runtime/logs/'.date("Ymd", time()) . 'warning.log',
+                    'logFile' => '@app/runtime/logs/' . date("Ymd", time()) . 'warning.log',
                 ],
             ],
         ],
@@ -133,7 +133,7 @@ $config = [
             'layout' => '@app/modules/admin/views/layouts/main.php',//yii2-admin的导航菜单
         ],
     ],
-    'name'=>$params['siteinfo']['sitename'],
+    'name' => $params['siteinfo']['sitename'],
     'params' => $params,
 ];
 

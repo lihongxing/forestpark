@@ -1,11 +1,13 @@
-<?php 
+<?php
 
-namespace app\common\core; 
+namespace app\common\core;
 
 use yii;
 
-class CommunicationHelper{
-    public static function ihttp_request($url, $post = '', $extra = array(), $timeout = 60) {
+class CommunicationHelper
+{
+    public static function ihttp_request($url, $post = '', $extra = array(), $timeout = 60)
+    {
         $urlset = parse_url($url);
         if (empty($urlset['path'])) {
             $urlset['path'] = '/';
@@ -146,9 +148,10 @@ class CommunicationHelper{
             return self::ihttp_response_parse($content, true);
         }
     }
-    
-    
-    public static function ihttp_response_parse($data, $chunked = false) {
+
+
+    public static function ihttp_response_parse($data, $chunked = false)
+    {
         $rlt = array();
         $headermeta = explode('HTTP/', $data);
         if (count($headermeta) > 2) {
@@ -157,7 +160,7 @@ class CommunicationHelper{
         $pos = strpos($data, "\r\n\r\n");
         $split1[0] = substr($data, 0, $pos);
         $split1[1] = substr($data, $pos + 4, strlen($data));
-    
+
         $split2 = explode("\r\n", $split1[0], 2);
         preg_match('/^(\S+) (\S+) (\S+)$/', $split2[0], $matches);
         $rlt['code'] = $matches[2];
@@ -180,31 +183,32 @@ class CommunicationHelper{
             } else {
                 $rlt['headers'][$key] = $value;
             }
-            if(!$isgzip && strtolower($key) == 'content-encoding' && strtolower($value) == 'gzip') {
+            if (!$isgzip && strtolower($key) == 'content-encoding' && strtolower($value) == 'gzip') {
                 $isgzip = true;
             }
-            if(!$ischunk && strtolower($key) == 'transfer-encoding' && strtolower($value) == 'chunked') {
+            if (!$ischunk && strtolower($key) == 'transfer-encoding' && strtolower($value) == 'chunked') {
                 $ischunk = true;
             }
         }
-        if($chunked && $ischunk) {
+        if ($chunked && $ischunk) {
             $rlt['content'] = self::ihttp_response_parse_unchunk($split1[1]);
         } else {
             $rlt['content'] = $split1[1];
         }
-        if($isgzip && function_exists('gzdecode')) {
+        if ($isgzip && function_exists('gzdecode')) {
             $rlt['content'] = gzdecode($rlt['content']);
         }
-    
+
         $rlt['meta'] = $data;
-        if($rlt['code'] == '100') {
+        if ($rlt['code'] == '100') {
             return self::ihttp_response_parse($rlt['content']);
         }
         return $rlt;
     }
-    
-    public static function ihttp_response_parse_unchunk($str = null) {
-        if(!is_string($str) or strlen($str) < 1) {
+
+    public static function ihttp_response_parse_unchunk($str = null)
+    {
+        if (!is_string($str) or strlen($str) < 1) {
             return false;
         }
         $eol = "\r\n";
@@ -214,30 +218,33 @@ class CommunicationHelper{
         do {
             $tmp = ltrim($tmp);
             $pos = strpos($tmp, $eol);
-            if($pos === false) {
+            if ($pos === false) {
                 return false;
             }
             $len = hexdec(substr($tmp, 0, $pos));
-            if(!is_numeric($len) or $len < 0) {
+            if (!is_numeric($len) or $len < 0) {
                 return false;
             }
             $str .= substr($tmp, ($pos + $add), $len);
-            $tmp  = substr($tmp, ($len + $pos + $add));
+            $tmp = substr($tmp, ($len + $pos + $add));
             $check = trim($tmp);
-        } while(!empty($check));
+        } while (!empty($check));
         unset($tmp);
         return $str;
     }
-    
-    
-    public static function ihttp_get($url) {
+
+
+    public static function ihttp_get($url)
+    {
         return self::ihttp_request($url);
     }
-    
-    
-    public static function ihttp_post($url, $data) {
+
+
+    public static function ihttp_post($url, $data)
+    {
         $headers = array('Content-Type' => 'application/x-www-form-urlencoded');
         return self::ihttp_request($url, $data, $headers);
     }
 }
+
 ?>

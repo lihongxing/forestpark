@@ -169,11 +169,11 @@ use yii\helpers\Url;
                              var mes_status = '<a href="'+data.url+'" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> 去审核</a>';
                          }
                          $("#mes_status").empty().html(mes_status);
+                         $('#modal-module-message').modal();
                          break;
                 }
 
             }
         });
-        $('#modal-module-message').modal();
     }
 </script>

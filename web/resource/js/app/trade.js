@@ -3,18 +3,20 @@ define(['bootstrap'], function($){
 	var reg_credit = /^[+-]?(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/i;
 	var reg_int = /^[0-9]\d*$/i;
 	trade.init = function() {
-		$('.modal-trade-credit1, .modal-trade-credit2, .modal-trade-consume, .modal-trade-card').on('click', function(){
-			$('#consume-Modal, #credit-Modal, #card-Modal, #card-edit-Modal, #group-Modal').remove();
+		$('.modal-trade-credit1, .modal-trade-credit2, .modal-trade-consume, .modal-trade-card, .modal-trade-cardsn, .modal-trade-cardconsume').on('click', function(){
+			$('#consume-Modal, #credit-Modal, #card-Modal, #card-edit-Modal, #group-Modal, #cardconsume-Modal').remove();
 			var type = $(this).data('type');
 			var uid = parseInt($(this).data('uid'));
 			if(type == 'consume') {
 				trade.consume(uid);
-			} else if(type == 'credit1' || type == 'credit2') {
+			} else if (type == 'credit1' || type == 'credit2') {
 				trade.credit(type, uid);
-			} else if(type == 'card') {
+			} else if (type == 'card') {
 				trade.card(uid);
-			} else if(type == 'cardsn') {
+			} else if (type == 'cardsn') {
 				trade.card_edit(uid);
+			} else if (type == 'cardconsume') {
+				trade.cardconsume();
 			}
 		});
 	};
@@ -298,6 +300,7 @@ define(['bootstrap'], function($){
 									_this.user.discount.discount = 1;
 								}
 								money = total * _this.user.discount.discount;
+								money = money.toFixed(1);
 							}
 							if(money < 0) {
 								money = 0;
@@ -876,9 +879,11 @@ define(['bootstrap'], function($){
 						Validator.validate();
 						if(Validator.isValid()) {
 							_this.password = $.trim($(':input[name="password"]').val());
+							_this.username = $.trim($('#username').val());
 							var param = {
 								'uid': _this.user.uid,
 								'password': _this.password,
+								'username': _this.username
 							}
 							$.post('./index.php?c=mc&a=trade&do=card', param, function(data){
 								if(data != 'success') {
@@ -897,7 +902,102 @@ define(['bootstrap'], function($){
 			card.init(uid);
 		});
 	}
+	
+	trade.cardconsume = function() {
+		var html = '<div class="modal fade" id="card-Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">'+
+			'	<div class="modal-dialog modal-lg" role="document">'+
+			'		<div class="modal-content">'+
+			'			<form class="table-responsive form-inline" method="post" action="" id="form-card">'+
+			'				<div class="modal-header">'+
+			'					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
+			'					<h4 class="modal-title" id="myModalLabel">卡券核销</h4>'+
+			'				</div>'+
+			'				<div class="modal-body">'+
+			'					<table class="table table-hover table-bordered">'+
+			'						<tr height="100">'+
+			'							<th width="150">'+
+			'								卡券code码'+
+			'							</th>'+
+			'							<td>'+
+			'								<div class="form-group">'+
+			'									<input type="text" value="" name="code" id="code" class="form-control"/>'+
+			'								<div class="help-block">请输入卡券code码</div>'+
+			'								</div>'+
+			'								</div>'+
+			'							</td>'+
+			'						</tr>'+
+			'					</table>'+
+			'				</div>'+
+			'				<div class="modal-footer">'+
+			'					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>'+
+			'					<input type="submit" class="btn btn-primary" id="submit" name="核销"value="核销">'+
+			'				</div>'+
+			'			</form>'+
+			'		</div>'+
+			'	</div>'+
+			'</div>';
+		require(['validator'], function($){
+			$('#card-Modal').remove();
+			$(document.body).append(html);
+			var dialog = $('#card-Modal');
+			dialog.modal('show');
+			$('#card-Modal').on('shown.bs.modal', function () {
+				$('#code').focus();
+			});
+			$('#form-card').bootstrapValidator({
+				fields: {
+					code: {
+						validators: {
+							notEmpty: {
+								message: '请填写卡券code码'
+							}
+						}
+					}
+				}
+			});
+			var Validator = $('#form-card').data('bootstrapValidator');
+			var card = {
+				'user': {},
+				'card': {},
+				'init': function(uid) {
+					if(uid > 0) {
+						$('#type').val('uid');
+						$('#code').val(uid);
+						$('#code').trigger('blur');
+						if(this.user.uid > 0) {
+							$('#code,  #type').attr('disabled', true);
+						}
+					}
+					this.submit();
+				},
 
+				'submit': function() {
+					var _this = this;
+					$('#form-card .btn-primary').click(function(){
+						Validator.validate();
+						if(Validator.isValid()) {
+							_this.code = $.trim($(':input[name="code"]').val());
+							var param = {
+								'code': _this.code,
+							}
+							$.post('./index.php?c=mc&a=trade&do=cardconsume', param, function(data){
+								if(data != 'success') {
+									util.message(data, '', 'error');
+									return false;
+								} else {
+									dialog.modal('hide');
+									util.message('核销成功', 'refresh', 'success');
+									return false;
+								}
+							});
+						}
+					});
+				}
+			};
+			card.init();
+		});
+	}
+	
 	trade.card_edit = function(uid) {
 		var html = '<div class="modal fade" id="card-edit-Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">'+
 			'	<div class="modal-dialog modal-lg" role="document">'+

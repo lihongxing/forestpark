@@ -1,4 +1,4 @@
-var gulp   = require('gulp');
+var gulp = require('gulp');
 var jshint = require('gulp-jshint');//语法检查
 var concat = require('gulp-concat');//合并文件
 var uglify = require('gulp-uglify');//压缩代码
@@ -11,7 +11,7 @@ gulp.task('jshint', function () {
         .pipe(jshint.reporter('default'));
 });
 // 合并文件之后压缩代码
-gulp.task('minify', function (){
+gulp.task('minify', function () {
     return gulp.src('wechat/*.js')
         .pipe(concat('wechat.js'))
         .pipe(gulp.dest('wechat/dist'))

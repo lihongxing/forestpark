@@ -1,7 +1,7 @@
 <?php
 
 // 引入 composer入口文件
-include '../' . '/vendor/autoload.php'; 
+include '../' . '/vendor/autoload.php';
 
 use EasyWeChat\Foundation\Application;
 
@@ -47,7 +47,7 @@ $server->setMessageHandler(function ($message) {
             // 链接消息...
             return "链接消息...";
             break;
-        default: 
+        default:
             // 其它消息... 
             return "其它消息...";
             break;

@@ -15,24 +15,25 @@ class TestController extends Controller
     {
         return $this->renderPartial('test');
     }
-    
+
     public function actionTestswitch()
     {
         return $this->renderPartial('testswitch');
     }
-    
+
     /**
      * membercache缓存测试
      */
     public function actionTestsmembercache()
     {
         //\yii::$app->membercache->set('111', '1234', 45);
-        
-        echo  \yii::$app->membercache->get('111');die();
-        
+
+        echo \yii::$app->membercache->get('111');
+        die();
+
         //\yii::$app->membercache->add('111', '122');
     }
-    
+
     /**
      * 带分页大小的分页测试
      */
@@ -43,13 +44,13 @@ class TestController extends Controller
             ->select(['id', 'email'])
             ->from('lhxcms_user');
         $pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => '1']);
-        $pageSize = isset($params['per-page']) ? intval($params['per-page']) :1; //默认20
+        $pageSize = isset($params['per-page']) ? intval($params['per-page']) : 1; //默认20
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => ['pageSize' => $pageSize,],
         ]);
         return $this->render('index', [
-            'dataProvider'=>$dataProvider,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -58,13 +59,13 @@ class TestController extends Controller
         $query = (new Query())
             ->select(['id', 'email'])
             ->from('lhxcms_user');
-        $pageSize = isset($params['per-page']) ? intval($params['per-page']) :1; //默认20
+        $pageSize = isset($params['per-page']) ? intval($params['per-page']) : 1; //默认20
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => ['pageSize' => $pageSize,],
         ]);
         return $this->render('index', [
-            'dataProvider'=>$dataProvider,
+            'dataProvider' => $dataProvider,
         ]);
     }
 }

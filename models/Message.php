@@ -7,6 +7,7 @@ use Yii;
 use yii\validators\BooleanValidator;
 use app\common\core\GlobalHelper;
 use yii\base\Widget;
+
 /**
  * This is the model class for table "{{%message}}".
  *
@@ -66,80 +67,103 @@ class Message extends \yii\db\ActiveRecord
      * @param $mes_type 站内消息类型
      * @return Boolean $status
      */
-    public Static function create($mes_data,$mes_type)
+    public Static function create($mes_data, $mes_type)
     {
-        $Messagemodel = new Message();
-        $Messagemodel->setAttribute('mes_type', $mes_type);
-        $Messagemodel->setAttribute('mes_addtime', time());
-        if($mes_type == 1){
-            $Usermodel =  new User();
+        if ($mes_type == 1) {
+            $Usermodel = new User();
             //mes_flag 1:A->B 2:A->A 3:B->A 4:B->B
-            if($mes_data['mes_flag'] == 1){
-                $release_userinfo = $Usermodel->find()
-                    ->select(['username'])
-                    ->asArray()
-                    ->where(['id' => $mes_data['mes_release_user']])
-                    ->one();
-                $Messagemodel->setAttribute('mes_release_user', $mes_data['mes_release_user']);
-                $Messagemodel->setAttribute('mes_issuer', $mes_data['mes_issuer']);
-                $release_username = $release_userinfo['username'];
-                $issuer_username = '您';
-            }elseif($mes_data['mes_flag'] == 2){
-                $Messagemodel->setAttribute('mes_release_user', $mes_data['mes_release_user']);
-                $Messagemodel->setAttribute('mes_issuer', $mes_data['mes_release_user']);
-                $issuerinfo = $Usermodel->find()
-                    ->select(['username'])
-                    ->asArray()
-                    ->where(['id' => $mes_data['mes_issuer']])
-                    ->one();
-                $release_username ='您' ;
-                $issuer_username = $issuerinfo['username'];
-            }elseif($mes_data['mes_flag'] == 3){
-                $Messagemodel->setAttribute('mes_release_user', $mes_data['mes_issuer']);
-                $Messagemodel->setAttribute('mes_issuer', $mes_data['mes_release_user']);
-                $issuerinfo = $Usermodel->find()
-                    ->select(['username'])
-                    ->asArray()
-                    ->where(['id' => $mes_data['mes_issuer']])
-                    ->one();
-                $release_username ='您' ;
-                $issuer_username = $issuerinfo['username'];
-            }elseif($mes_data['mes_flag'] == 4){
-                $Messagemodel->setAttribute('mes_release_user', $mes_data['mes_issuer']);
-                $Messagemodel->setAttribute('mes_issuer', $mes_data['mes_issuer']);
-                $release_userinfo = $Usermodel->find()
-                    ->select(['username'])
-                    ->asArray()
-                    ->where(['id' => $mes_data['mes_release_user']])
-                    ->one();
-                $release_username = $release_userinfo['username'];
-                $issuer_username = '您';
+            foreach ($mes_data['mes_issuer'] as $key => $mes_issuer) {
+                $Messagemodel = new Message();
+                $Messagemodel->setAttribute('mes_type', $mes_type);
+                $Messagemodel->setAttribute('mes_addtime', time());
+                if ($mes_data['mes_flag'] == 1) {
+                    $release_userinfo = $Usermodel->find()
+                        ->select(['username'])
+                        ->asArray()
+                        ->where(['id' => $mes_data['mes_release_user']])
+                        ->one();
+                    $Messagemodel->setAttribute('mes_release_user', $mes_data['mes_release_user']);
+                    $Messagemodel->setAttribute('mes_issuer', $mes_issuer);
+                    $release_username = $release_userinfo['username'];
+                    $issuer_username = '您';
+                } elseif ($mes_data['mes_flag'] == 2) {
+                    $Messagemodel->setAttribute('mes_release_user', $mes_data['mes_release_user']);
+                    $Messagemodel->setAttribute('mes_issuer', $mes_data['mes_release_user']);
+                    $issuerinfo = $Usermodel->find()
+                        ->select(['username'])
+                        ->asArray()
+                        ->where(['id' => $mes_issuer])
+                        ->one();
+                    $release_username = '您';
+                    $issuer_username = $issuerinfo['username'];
+                } elseif ($mes_data['mes_flag'] == 3) {
+                    if ($mes_issuer != yii::$app->user - id) {
+                        continue;
+                    }
+                    $Messagemodel->setAttribute('mes_release_user', $mes_issuer);
+                    $Messagemodel->setAttribute('mes_issuer', $mes_data['mes_release_user']);
+                    $issuerinfo = $Usermodel->find()
+                        ->select(['username'])
+                        ->asArray()
+                        ->where(['id' => $mes_issuer])
+                        ->one();
+                    $release_username = '您';
+                    $issuer_username = $issuerinfo['username'];
+                } elseif ($mes_data['mes_flag'] == 4) {
+                    $Messagemodel->setAttribute('mes_release_user', $mes_issuer);
+                    $Messagemodel->setAttribute('mes_issuer', $mes_issuer);
+                    $release_userinfo = $Usermodel->find()
+                        ->select(['username'])
+                        ->asArray()
+                        ->where(['id' => $mes_data['mes_release_user']])
+                        ->one();
+                    $release_username = $release_userinfo['username'];
+                    if ($mes_issuer == yii::$app->user->id) {
+                        $issuer_username = '您';
+                    } else {
+                        $issuerinfo = $Usermodel->find()
+                            ->select(['username'])
+                            ->asArray()
+                            ->where(['id' => yii::$app->user->id])
+                            ->one();
+                        $issuer_username = $issuerinfo['username'];
+                    }
+
+                }
+                $mes_template = array(
+                    'bulletin' => array(
+                        'bulletin_release' => "{$release_username}发布标题为{$mes_data["mes_title"]}需要{$issuer_username}审核！",
+                        'bulletin_issuer' => "{$release_username}发布标题为{$mes_data["mes_title"]}需要{$issuer_username}审核！",
+                        'bulletin_examineissuer' => "{$release_username}发布标题为{$mes_data["mes_title"]}公告{$issuer_username}审核完成！",
+                        'bulletin_examinerelease' => "{$release_username}发布标题为{$mes_data["mes_title"]}公告{$issuer_username}审核完成！",
+                    ),
+                    'videoplay' => array(
+                        'videoplay_release' => "{$release_username}发布标题为{$mes_data["mes_title"]}视屏播放需要{$issuer_username}审核！",
+                        'videoplay_issuer' => "{$release_username}发布标题为{$mes_data["mes_title"]}视屏播放需要{$issuer_username}审核！",
+                        'videoplay_examineissuer' => "{$release_username}发布标题为{$mes_data["mes_title"]}视屏播放{$issuer_username}审核完成！",
+                        'videoplay_examinerelease' => "{$release_username}发布标题为{$mes_data["mes_title"]}视屏播放{$issuer_username}审核完成！",
+                    )
+                );
+                $mes_content = $mes_template[$mes_data['mes_module']][$mes_data['mes_template']];
+                $Messagemodel->setAttribute('mes_title', $mes_data['mes_title']);
+                $Messagemodel->setAttribute('mes_content', $mes_content);
+                $Messagemodel->setAttribute('mes_status', 1);
+                $Messagemodel->setAttribute('mes_class', $mes_data['mes_class']);
+                $Messagemodel->setAttribute('mes_sourse_id', $mes_data['mes_sourse_id']);
+                $Messagemodel->setAttribute('mes_module', $mes_data['mes_module']);
+                $Messagemodel->save();
+
             }
-
-
-            $mes_template = array(
-                'bulletin' => array(
-                    'bulletin_release' => "{$release_username}发布标题为{$mes_data["mes_title"]}需要{$issuer_username}审核！",
-                    'bulletin_issuer'  => "{$release_username}发布标题为{$mes_data["mes_title"]}需要{$issuer_username}审核！",
-                    'bulletin_examineissuer' => "{$release_username}发布标题为{$mes_data["mes_title"]}公告{$issuer_username}审核完成！",
-                    'bulletin_examinerelease' => "{$release_username}发布标题为{$mes_data["mes_title"]}公告{$issuer_username}审核完成！",
-                )
-            );
-            $mes_title = $mes_template[$mes_data['module']][$mes_data['mes_template']];
-            $Messagemodel->setAttribute('mes_content', $mes_title);
-            $Messagemodel->setAttribute('mes_status', 1);
-            $Messagemodel->setAttribute('mes_class', $mes_data['mes_class']);
-            $Messagemodel->setAttribute('mes_sourse_id', $mes_data['mes_sourse_id']);
-            $Messagemodel->setAttribute('mes_module', $mes_data['mes_module']);
-
-        }elseif($mes_type == 2){
+            $result = true;
+        } elseif ($mes_type == 2) {
+            $Messagemodel = new Message();
             $Messagemodel->setAttribute('mes_title', $mes_data['mes_title']);
             $Messagemodel->setAttribute('mes_status', 3);
             $Messagemodel->setAttribute('mes_content', $mes_data['mes_content']);
-        }
-        $result = true;
-        if($Messagemodel->save()){
-            $result = false;
+            $result = true;
+            if ($Messagemodel->save()) {
+                $result = false;
+            }
         }
         return $result;
     }
@@ -150,16 +174,15 @@ class Message extends \yii\db\ActiveRecord
      * @param $mes_sourse_id 站内信息的来源id
      * @param $status 站内信息状态
      */
-    public static function updatestatus($mes_sourse_id, $status, $mes_issuer, $mes_release_user)
+    public static function updatestatus($mes_sourse_id, $status, $mes_release_user)
     {
-        if(!empty($mes_sourse_id)){
+        if (!empty($mes_sourse_id)) {
             $attributes = [
                 'mes_status' => $status == 'true' ? 2 : 1
             ];
-            $condition = "mes_sourse_id = :mes_sourse_id AND mes_issuer = :mes_issuer AND mes_release_user = :mes_release_user";
+            $condition = "mes_sourse_id = :mes_sourse_id  AND mes_release_user = :mes_release_user";
             $params = [
                 ':mes_sourse_id' => $mes_sourse_id,
-                ':mes_issuer' => $mes_issuer,
                 ':mes_release_user' => $mes_release_user
             ];
             $Messagemodel = new Message();
@@ -170,10 +193,10 @@ class Message extends \yii\db\ActiveRecord
 
     public static function Messagedelete($mes_ids, $module)
     {
-        if(!empty($mes_ids)){
+        if (!empty($mes_ids)) {
             $Messagemodel = new Message();
-            foreach($mes_ids as $key => &$item){
-                $item = $module.'_'.$item;
+            foreach ($mes_ids as $key => &$item) {
+                $item = $module . '_' . $item;
             }
             $Messagemodel->deleteAll(['in', 'mes_sourse_id', $mes_ids]);
         }
@@ -189,7 +212,7 @@ class Message extends \yii\db\ActiveRecord
             ->asArray()
             ->all();
         $message1s = Message::find()
-            ->where(['mes_type' => 1, 'mes_issuer' => \Yii::$app->user->id])
+            ->where(['mes_type' => 1, 'mes_status' => 1, 'mes_issuer' => \Yii::$app->user->id])
             ->orderBy('mes_addtime DESC')
             ->asArray()
             ->all();
@@ -197,27 +220,27 @@ class Message extends \yii\db\ActiveRecord
             ->where(['mes_type' => 2, 'mes_status' => 3])
             ->count();
         $count2 = Message::find()
-            ->where(['mes_type' => 1, 'mes_issuer' => \Yii::$app->user->id])
+            ->where(['mes_type' => 1, 'mes_status' => 1, 'mes_issuer' => \Yii::$app->user->id])
             ->count();
-        if(empty($nums)){
-            $messages = array_slice(GlobalHelper::array_sort(array_merge($message2s,$message1s), 'mes_addtime', 'desc'), 0);
-        }else{
-            $messages = array_slice(GlobalHelper::array_sort(array_merge($message2s,$message1s), 'mes_addtime', 'desc'), 0, $nums);
+        if (empty($nums)) {
+            $messages = array_slice(GlobalHelper::array_sort(array_merge($message2s, $message1s), 'mes_addtime', 'desc'), 0);
+        } else {
+            $messages = array_slice(GlobalHelper::array_sort(array_merge($message2s, $message1s), 'mes_addtime', 'desc'), 0, $nums);
         }
-        foreach($messages as $key => &$item){
+        foreach ($messages as $key => &$item) {
             //获取发布人的信息
             $Usermodel = new User();
             $release_user = $Usermodel->find()
                 ->where(['id' => $item['mes_release_user']])
                 ->asArray()
                 ->one();
-            $item['mes_addtime'] = GlobalHelper::format_date_distance_now(date("Y-m-d H:i:s",$item['mes_addtime']));
+            $item['mes_addtime'] = GlobalHelper::format_date_distance_now(date("Y-m-d H:i:s", $item['mes_addtime']));
             $item['release_user'] = $release_user;
         }
         return [
-            'count1' =>$count1,
-            'messages' =>$messages,
-            'count2' =>$count2,
+            'count1' => $count1,
+            'messages' => $messages,
+            'count2' => $count2,
         ];
     }
 }

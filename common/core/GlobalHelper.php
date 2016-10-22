@@ -8,12 +8,12 @@ class GlobalHelper
 
     /**
      * @分页函数
-     * 
-     * @param unknown $total            
-     * @param unknown $pageIndex            
-     * @param number $pageSize            
-     * @param string $url            
-     * @param unknown $context            
+     *
+     * @param unknown $total
+     * @param unknown $pageIndex
+     * @param number $pageSize
+     * @param string $url
+     * @param unknown $context
      * @return string
      */
     public static function pagination($total, $pageIndex, $pageSize = 15, $url = '', $context = array('before' => 5, 'after' => 4, 'ajaxcallback' => ''))
@@ -32,7 +32,7 @@ class GlobalHelper
         if ($context['ajaxcallback']) {
             $context['isajax'] = true;
         }
-        
+
         $pdata['tcount'] = $total;
         $pdata['tpage'] = ceil($total / $pageSize);
         if ($pdata['tpage'] <= 1) {
@@ -46,9 +46,9 @@ class GlobalHelper
         $pdata['pindex'] = $cindex > 1 ? $cindex - 1 : 1;
         $pdata['nindex'] = $cindex < $pdata['tpage'] ? $cindex + 1 : $pdata['tpage'];
         $pdata['lindex'] = $pdata['tpage'];
-        
+
         if ($context['isajax']) {
-            if (! $url) {
+            if (!$url) {
                 $url = $_W['script_name'] . '?' . http_build_query($_GET);
             }
             $pdata['faa'] = 'href="javascript:;" page="' . $pdata['findex'] . '" ' . ($callbackfunc ? 'onclick="' . $callbackfunc . '(\'' . $_W['script_name'] . $url . '\', \'' . $pdata['findex'] . '\', this);return false;"' : '');
@@ -72,19 +72,19 @@ class GlobalHelper
                 $pdata['laa'] = 'href="' . $_W['script_name'] . '?' . http_build_query($_GET) . '"';
             }
         }
-        
+
         $html = '<div><ul class="pagination pagination-centered">';
         if ($pdata['cindex'] > 1) {
             $html .= "<li><a {$pdata['faa']} class=\"pager-nav\">首页</a></li>";
             $html .= "<li><a {$pdata['paa']} class=\"pager-nav\">&laquo;上一页</a></li>";
         }
-        if (! $context['before'] && $context['before'] != 0) {
+        if (!$context['before'] && $context['before'] != 0) {
             $context['before'] = 5;
         }
-        if (! $context['after'] && $context['after'] != 0) {
+        if (!$context['after'] && $context['after'] != 0) {
             $context['after'] = 4;
         }
-        
+
         if ($context['after'] != 0 && $context['before'] != 0) {
             $range = array();
             $range['start'] = max(1, $pdata['cindex'] - $context['before']);
@@ -93,7 +93,7 @@ class GlobalHelper
                 $range['end'] = min($pdata['tpage'], $range['start'] + $context['before'] + $context['after']);
                 $range['start'] = max(1, $range['end'] - $context['before'] - $context['after']);
             }
-            for ($i = $range['start']; $i <= $range['end']; $i ++) {
+            for ($i = $range['start']; $i <= $range['end']; $i++) {
                 if ($context['isajax']) {
                     $aa = 'href="javascript:;" page="' . $i . '" ' . ($callbackfunc ? 'onclick="' . $callbackfunc . '(\'' . $_W['script_name'] . $url . '\', \'' . $i . '\', this);return false;"' : '');
                 } else {
@@ -107,7 +107,7 @@ class GlobalHelper
                 $html .= ($i == $pdata['cindex'] ? '<li class="active"><a href="javascript:;">' . $i . '</a></li>' : "<li><a {$aa}>" . $i . '</a></li>');
             }
         }
-        
+
         if ($pdata['cindex'] < $pdata['tpage']) {
             $html .= "<li><a {$pdata['naa']} class=\"pager-nav\">下一页&raquo;</a></li>";
             $html .= "<li><a {$pdata['laa']} class=\"pager-nav\">尾页</a></li>";
@@ -118,13 +118,13 @@ class GlobalHelper
 
     /**
      * 根据data判断返回ture or false
-     * 
-     * @param unknown $data            
+     *
+     * @param unknown $data
      * @return boolean
      */
     public static function is_error($data)
     {
-        if (empty($data) || ! is_array($data) || ! array_key_exists('errno', $data) || (array_key_exists('errno', $data) && $data['errno'] == 0)) {
+        if (empty($data) || !is_array($data) || !array_key_exists('errno', $data) || (array_key_exists('errno', $data) && $data['errno'] == 0)) {
             return false;
         } else {
             return true;
@@ -133,13 +133,13 @@ class GlobalHelper
 
     /**
      * 根据目录创建文件夹
-     * 
-     * @param unknown $path            
+     *
+     * @param unknown $path
      * @return boolean
      */
     public static function mkdirs($path)
     {
-        if (! is_dir($path)) {
+        if (!is_dir($path)) {
             self::mkdirs(dirname($path));
             mkdir($path);
         }
@@ -148,9 +148,9 @@ class GlobalHelper
 
     /**
      * php版本
-     * 
-     * @param unknown $version1            
-     * @param unknown $version2            
+     *
+     * @param unknown $version1
+     * @param unknown $version2
      * @return mixed
      */
     public static function ver_compare($version1, $version2)
@@ -169,10 +169,10 @@ class GlobalHelper
         $version2 = intval($version2);
         return version_compare($version1, $version2);
     }
-    
+
     /**
      * @字符串长度
-     * 
+     *
      * @param unknown $string
      * @param string $charset
      * @return mixed|number
@@ -194,25 +194,25 @@ class GlobalHelper
                 while ($n < $strlen) {
                     $t = ord($string[$n]);
                     if ($t == 9 || $t == 10 || (32 <= $t && $t <= 126)) {
-                        $n ++;
-                        $noc ++;
+                        $n++;
+                        $noc++;
                     } elseif (194 <= $t && $t <= 223) {
                         $n += 2;
-                        $noc ++;
+                        $noc++;
                     } elseif (224 <= $t && $t <= 239) {
                         $n += 3;
-                        $noc ++;
+                        $noc++;
                     } elseif (240 <= $t && $t <= 247) {
                         $n += 4;
-                        $noc ++;
+                        $noc++;
                     } elseif (248 <= $t && $t <= 251) {
                         $n += 5;
-                        $noc ++;
+                        $noc++;
                     } elseif ($t == 252 || $t == 253) {
                         $n += 6;
-                        $noc ++;
+                        $noc++;
                     } else {
-                        $n ++;
+                        $n++;
                     }
                 }
             } else {
@@ -220,34 +220,36 @@ class GlobalHelper
                     $t = ord($string[$n]);
                     if ($t > 127) {
                         $n += 2;
-                        $noc ++;
+                        $noc++;
                     } else {
-                        $n ++;
-                        $noc ++;
+                        $n++;
+                        $noc++;
                     }
                 }
             }
             return $noc;
         }
     }
-    
+
     public static function error($errno, $message = '')
     {
-    	return array(
-    		'errno' => $errno,
-    		'message' => $message,
-    	);
+        return array(
+            'errno' => $errno,
+            'message' => $message,
+        );
     }
-    
-    public static function file_random_name($dir, $ext){
-    	do {
-    		$filename = self::random(30) . '.' . $ext;
-    	} while (file_exists($dir . $filename));
-    
-    	return $filename;
+
+    public static function file_random_name($dir, $ext)
+    {
+        do {
+            $filename = self::random(30) . '.' . $ext;
+        } while (file_exists($dir . $filename));
+
+        return $filename;
     }
-    
-    public static function random($length, $numeric = FALSE) {
+
+    public static function random($length, $numeric = FALSE)
+    {
         $seed = base_convert(md5(microtime() . $_SERVER['DOCUMENT_ROOT']), 16, $numeric ? 10 : 35);
         $seed = $numeric ? (str_replace('0', '', $seed) . '012340567890') : ($seed . 'zZ' . strtoupper($seed));
         if ($numeric) {
@@ -262,31 +264,33 @@ class GlobalHelper
         }
         return $hash;
     }
-    
-    public static function strexists($string, $find) {
-    	return !(strpos($string, $find) === FALSE);
+
+    public static function strexists($string, $find)
+    {
+        return !(strpos($string, $find) === FALSE);
     }
 
-    public static function message($msg, $redirect = '', $type = '') {
+    public static function message($msg, $redirect = '', $type = '')
+    {
         global $_W, $_GPC;
-        if($redirect == 'refresh') {
+        if ($redirect == 'refresh') {
             $redirect = $_W['script_name'] . '?' . $_SERVER['QUERY_STRING'];
         }
-        if($redirect == 'referer') {
+        if ($redirect == 'referer') {
             $redirect = referer();
         }
-        if($redirect == '') {
+        if ($redirect == '') {
             $type = in_array($type, array('success', 'error', 'info', 'warning', 'ajax', 'sql')) ? $type : 'info';
         } else {
             $type = in_array($type, array('success', 'error', 'info', 'warning', 'ajax', 'sql')) ? $type : 'success';
         }
         if ($_W['isajax'] || !empty($_GET['isajax']) || $type == 'ajax') {
-            if($type != 'ajax' && !empty($_GPC['target'])) {
+            if ($type != 'ajax' && !empty($_GPC['target'])) {
                 exit("
                     <script type=\"text/javascript\">
                     parent.require(['jquery', 'util'], function($, util){
-                    	var url = ".(!empty($redirect) ? 'parent.location.href' : "''").";
-                    	var modalobj = util.message('".$msg."', '', '".$type."');
+                    	var url = " . (!empty($redirect) ? 'parent.location.href' : "''") . ";
+                    	var modalobj = util.message('" . $msg . "', '', '" . $type . "');
                     	if (url) {
                     		modalobj.on('hide.bs.modal', function(){\$('.modal').each(function(){if(\$(this).attr('id') != 'modal-message') {\$(this).modal('hide');}});top.location.reload()});
                     	}
@@ -301,19 +305,20 @@ class GlobalHelper
             }
         }
         if (empty($msg) && !empty($redirect)) {
-            header('location: '.$redirect);
+            header('location: ' . $redirect);
         }
         $label = $type;
-        if($type == 'error') {
+        if ($type == 'error') {
             $label = 'danger';
         }
-        if($type == 'ajax' || $type == 'sql') {
+        if ($type == 'ajax' || $type == 'sql') {
             $label = 'warning';
         }
         exit();
     }
 
-    static function  tomedia($src, $local_path = false){
+    static function tomedia($src, $local_path = false)
+    {
         global $_W;
         if (empty($src)) {
             return '';
@@ -326,7 +331,7 @@ class GlobalHelper
             return $src;
         }
         if ($local_path) {
-            $src =  yii::$app->params['siteurl'] . $_W['config']['upload']['attachdir'] . '/' . $src;
+            $src = yii::$app->params['siteurl'] . $_W['config']['upload']['attachdir'] . '/' . $src;
         } else {
             $src = $_W['attachurl'] . $src;
         }
@@ -338,7 +343,8 @@ class GlobalHelper
      * @param $filename :打包下载的文件
      * @param $fileNameArr 需要打包下载的文件
      */
-    static function download($filename,$fileNameArr){
+    static function download($filename, $fileNameArr)
+    {
         // 生成文件
         $zip = new \ZipArchive (); // 使用本类，linux需开启zlib，windows需取消php_zip.dll前的注释
         if ($zip->open($filename, \ZIPARCHIVE::CREATE) !== TRUE) {
@@ -350,7 +356,7 @@ class GlobalHelper
         }
         $zip->close(); // 关闭
         //下面是输出下载;
-        if(!file_exists($filename)){
+        if (!file_exists($filename)) {
             exit("无法找到文件"); //即使创建，仍有可能失败。。。。
         }
         header("Cache-Control: max-age=0");
@@ -364,42 +370,49 @@ class GlobalHelper
     }
 
 
-    static function format_date_distance_now($time){
-        $t=time()-strtotime($time);
-        if($t>0){$ba = '前';}else{$ba = '后';}
-        $f=array(
-            '31536000'=>'年',
-            '2592000'=>'个月',
-            '604800'=>'星期',
-            '86400'=>'天',
-            '3600'=>'小时',
-            '60'=>'分钟',
-            '1'=>'秒'
+    static function format_date_distance_now($time)
+    {
+        $t = time() - strtotime($time);
+        if ($t > 0) {
+            $ba = '前';
+        } else {
+            $ba = '后';
+        }
+        $f = array(
+            '31536000' => '年',
+            '2592000' => '个月',
+            '604800' => '星期',
+            '86400' => '天',
+            '3600' => '小时',
+            '60' => '分钟',
+            '1' => '秒'
         );
 
-        foreach ($f as $k=>$v) {
-            if (0 !=$c=floor(abs($t)/(int)$k)) {
-                return $c.$v.$ba;
+        foreach ($f as $k => $v) {
+            if (0 != $c = floor(abs($t) / (int)$k)) {
+                return $c . $v . $ba;
             }
         }
     }
 
 
-    static function array_sort($array, $keys, $type='asc'){
+    static function array_sort($array, $keys, $type = 'asc')
+    {
         $keysvalue = $new_array = array();
-        foreach ($array as $k=>$v){
+        foreach ($array as $k => $v) {
             $keysvalue[$k] = $v[$keys];
         }
-        if($type == 'asc'){
+        if ($type == 'asc') {
             asort($keysvalue);
-        }else{
+        } else {
             arsort($keysvalue);
         }
         reset($keysvalue);
-        foreach ($keysvalue as $k=>$v){
+        foreach ($keysvalue as $k => $v) {
             $new_array[$k] = $array[$k];
         }
         return $new_array;
     }
 }
+
 ?>

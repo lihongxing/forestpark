@@ -25,7 +25,7 @@ class NavigationForm extends \yii\db\ActiveRecord
     }
 
     /**
-	 * 得到在前台显示的导航栏
+     * 得到在前台显示的导航栏
      */
     public function GetNavigation()
     {

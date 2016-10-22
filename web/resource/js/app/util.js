@@ -4,9 +4,9 @@
 		if(src.indexOf('http://') == 0 || src.indexOf('https://') == 0 || src.indexOf('./resource') == 0) {
 			return src;
 		} else if(src.indexOf('./addons') == 0) {
-			var url=window.document.location.href;
-			var pathName = window.document.location.pathname;
-			var pos = url.indexOf(pathName);
+			var url=window.document.location.href; 
+			var pathName = window.document.location.pathname; 
+			var pos = url.indexOf(pathName); 
 			var host = url.substring(0,pos);
 			if (src.substr(0,1)=='.') {
 				src=src.substr(1);
@@ -42,7 +42,6 @@
 			elm.clip = true;
 		});
 	};
-
 	util.colorpicker = function(elm, callback) {
 		require(['colorpicker'], function(){
 			$(elm).spectrum({
@@ -78,9 +77,9 @@
 			});
 		});
 	}
-
+	
 	util.uploadMultiPictures = function(callback, options){
-
+		
 		var opts = {
 			type :'image',
 			tabs : {
@@ -90,12 +89,11 @@
 			},
 			path : '',
 			direct : false,
-			multi : true,
+			multiple : true,
 			dest_dir : ''
 		};
-
+		
 		opts = $.extend({}, opts, options);
-
 		require(['jquery', 'fileUploader'], function($, fileUploader){
 			fileUploader.show(function(images){
 				if(images.length > 0){
@@ -109,7 +107,7 @@
 			}, opts);
 		});
 	}
-
+	
 	util.editor = function(elm, callback){
 		var id = elm.id;
 		if(!id) {
@@ -152,7 +150,7 @@
 			}
 		};
 	};
-
+	
 	// target dom 对象
 	util.emotion = function(elm, target, callback) {
 		require(['jquery.caret', 'bootstrap', 'css!../../components/emotions/emotions.css'],function($){
@@ -192,7 +190,7 @@
 		if(modalobj.length == 0) {
 			$(document.body).append('<div id="' + loadingid + '" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>');
 			modalobj = $('#' + loadingid);
-			html =
+			html = 
 				'<div class="modal-dialog">'+
 				'	<div style="text-align:center; background-color: transparent;">'+
 				'		<img style="width:48px; height:48px; margin-top:100px;" src="../attachment/images/global/loading.gif" title="正在努力加载...">'+
@@ -204,7 +202,7 @@
 		modalobj.next().css('z-index', 999999);
 		return modalobj;
 	};
-
+	
 	util.loaded = function(){
 		var loadingid = 'modal-loading';
 		var modalobj = $('#' + loadingid);
@@ -212,7 +210,7 @@
 			modalobj.modal('hide');
 		}
 	}
-
+	
 	util.dialog = function(title, content, footer, options) {
 		if(!options) {
 			options = {};
@@ -225,7 +223,7 @@
 			$(document.body).append('<div id="' + options.containerName + '" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>');
 			modalobj = $('#' + options.containerName);
 		}
-		html =
+		html = 
 			'<div class="modal-dialog">'+
 			'	<div class="modal-content">';
 		if(title) {
@@ -260,7 +258,7 @@
 		}
 		return modalobj;
 	};
-
+	
 	util.message = function(msg, redirect, type){
 		if(!redirect && !type){
 			type = 'info';
@@ -271,7 +269,7 @@
 		if(type == '') {
 			type = redirect == '' ? 'error' : 'success';
 		}
-
+		
 		var icons = {
 			success : 'check-circle',
 			error :'times-circle',
@@ -289,13 +287,13 @@
 				p = '<p><a href="' + redirect + '" target="main" data-dismiss="modal" aria-hidden="true">如果你的浏览器在 <span id="timeout"></span> 秒后没有自动跳转，请点击此链接</a></p>';
 			}
 		}
-		var content =
+		var content = 
 			'			<i class="pull-left fa fa-4x fa-'+icons[type]+'"></i>'+
 			'			<div class="pull-left"><p>'+ msg +'</p>' +
 			p +
 			'			</div>'+
 			'			<div class="clearfix"></div>';
-		var footer =
+		var footer = 
 			'			<button type="button" class="btn btn-default" data-dismiss="modal">确认</button>';
 		var modalobj = util.dialog('系统提示', content, footer, {'containerName' : 'modal-message'});
 		modalobj.find('.modal-content').addClass('alert alert-'+type);
@@ -324,7 +322,7 @@
 		modalobj.modal('show');
 		return modalobj;
 	};
-
+	
 	util.map = function(val, callback){
 		require(['map'], function(BMap){
 			if(!val) {
@@ -357,7 +355,7 @@
 				modalobj = util.dialog('请选择地点', content, footer, {containerName : 'map-dialog'});
 				modalobj.find('.modal-dialog').css('width', '80%');
 				modalobj.modal({'keyboard': false});
-
+				
 				map = util.map.instance = new BMap.Map('map-container');
 				map.centerAndZoom(point, 12);
 				map.enableScrollWheelZoom();
@@ -399,7 +397,7 @@
 				marker.setPosition(point);
 				map.panTo(marker.getPosition());
 			});
-
+			
 			modalobj.find('button.btn-primary').off('click');
 			modalobj.find('button.btn-primary').on('click', function(){
 				if($.isFunction(callback)) {
@@ -414,10 +412,10 @@
 			modalobj.modal('show');
 		});
 	}; // end of map
-
+	
 	util.iconBrowser = function(callback){
 		var footer = '<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>';
-		var modalobj = util.dialog('请选择图标',['/admin/site/icon.html?callback=selectIconComplete'],footer,{containerName:'icon-container'});
+		var modalobj = util.dialog('请选择图标',['./index.php?c=utility&a=icon&callback=selectIconComplete'],footer,{containerName:'icon-container'});
 		modalobj.modal({'keyboard': false});
 		modalobj.find('.modal-dialog').css({'width':'70%'});
 		modalobj.find('.modal-body').css({'height':'70%','overflow-y':'scroll'});
@@ -430,7 +428,7 @@
 			}
 		};
 	}; // end of icon dialog
-
+	
 	util.emojiBrowser = function(callback){
 		var footer = '<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>';
 		var modalobj = util.dialog('请选择表情',['./index.php?c=utility&a=emoji&callback=selectEmojiComplete'],footer,{containerName:'icon-container'});
@@ -446,7 +444,7 @@
 			}
 		};
 	}; // end of emoji dialog
-
+	
 	util.linkBrowser = function(callback){
 		var footer = '<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>';
 		var modalobj = util.dialog('请选择链接',['./index.php?c=utility&a=link&callback=selectLinkComplete'],footer,{containerName:'link-container'});
@@ -510,13 +508,46 @@
 		};
 	};
 
+	util.phoneBrowser = function(callback, page){
+		var footer = '';
+		var modalobj = util.dialog('一键拨号',['./index.php?c=utility&a=link&do=phone&callback=phoneLinkComplete&page='+ page],footer,{containerName:'link-container'});
+		modalobj.modal({'keyboard': false});
+		modalobj.find('.modal-body').css({'height':'120px','overflow-y':'auto' });
+		modalobj.modal('show');
+
+		window.phoneLinkComplete = function(link, page){
+			if($.isFunction(callback)){
+				callback(link, page);
+				if (page == '' || page == undefined) {
+					modalobj.modal('hide');
+				}
+			}
+		};
+	};
+
+	util.showModuleLink = function(callback){
+		var footer = '';
+		var modalobj = util.dialog('模块链接选择',['./index.php?c=utility&a=link&do=modulelink&callback=moduleLinkComplete'], '');
+		modalobj.modal({'keyboard': false});
+		modalobj.find('.modal-body').css({'height':'700px','overflow-y':'auto' });
+		modalobj.modal('show');
+
+		window.moduleLinkComplete = function(link, permission){
+			if($.isFunction(callback)){
+				callback(link, permission);
+				modalobj.modal('hide');
+			}
+		};
+
+	};
+
 	/**
 	 * val : image 值;
 	 * callback: 回调函数
-	 * base64options: base64(json($options))
 	 * options: {tabs: {'browser': 'active', 'upload': '', 'remote': ''}
+	 * base64options: base64(json($options))
 	 **/
-	util.image = function(val, callback, base64options, options) {
+	util.image = function(val, callback, options, base64options) {
 		var opts = {
 			type :'image',
 			direct : false,
@@ -527,7 +558,9 @@
 			thumb : false,
 			width : 0
 		};
-
+		if(!options && base64options){
+			options = base64options;
+		}
 		opts = $.extend({}, opts, options);
 		opts.type = 'image';
 
@@ -549,11 +582,12 @@
 			multiple : false,
 			acid : 0,
 			path : val,
-			dest_dir : ''
+			dest_dir : '',
+			isWechat : true
 		};
 		opts = $.extend({}, opts, options);
-		require(['jquery', 'wechatFileUploader'], function($, wechatFileUploader){
-			wechatFileUploader.show(function(images){
+		require(['jquery', 'fileUploader'], function($, fileUploader){
+			fileUploader.show(function(images){
 				if(images){
 					if($.isFunction(callback)){
 						callback(images);
@@ -563,7 +597,7 @@
 		});
 	};
 
-	util.audio = function(val, callback, base64options, options) {
+	util.audio = function(val, callback, options, base64options) {
 		var opts = {
 			type :'audio',
 			direct : false,
@@ -574,10 +608,10 @@
 		if(val){
 			opts.path = val;
 		}
-
+		if(!options && base64options){
+			options = base64options;
+		}
 		opts = $.extend({}, opts, options);
-		opts.type = 'audio';
-
 		require(['jquery', 'fileUploader'], function($, fileUploader){
 			fileUploader.show(function(audios){
 				if(audios){
@@ -587,9 +621,33 @@
 				}
 			}, opts);
 		});
-
+		
 	}; // end of audio
 
+	util.wechat_audio = function(val, callback, options) {
+		var opts = {
+			type :'voice',
+			direct : false,
+			multiple : false,
+			path : '',
+			dest_dir : '',
+			isWechat : true
+		};
+		if(val){
+			opts.path = val;
+		}
+		opts = $.extend({}, opts, options);
+		require(['jquery', 'fileUploader'], function($, fileUploader){
+			fileUploader.show(function(audios){
+				if(audios){
+					if($.isFunction(callback)){
+						callback(audios);
+					}
+				}
+			}, opts);
+		});
+	};
+	
 	/*
 		打开远程地址
 		@params string url 目标远程地址
@@ -607,7 +665,7 @@
 		var events = $.extend({}, defaultevents, events);
 
 		var footer = (typeof events['confirm'] == 'function' ? '<a href="#" class="btn btn-primary confirm">确定</a>' : '') + '<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">关闭</a><iframe id="_formtarget" style="display:none;" name="_formtarget"></iframe>';
-		var modalobj = util.dialog(title, '正在加载中', footer, {'containerName' : 'modal-panel-ajax'});
+		var modalobj = util.dialog(title ? title : '系统信息', '正在加载中', footer, {'containerName' : 'modal-panel-ajax'});
 
 		if (typeof option['width'] != 'undeinfed' && option['width'] > 0) {
 			modalobj.find('.modal-dialog').css({'width' : option['width']});
@@ -620,13 +678,26 @@
 				}
 			}
 		}
-		modalobj.find('.modal-body').load(url, function(){
+		var ajaxresult;
+		modalobj.find('.modal-body').load(url, function(data){
+			try {
+				ajaxresult = $.parseJSON(data);
+				modalobj.find('.modal-body').html('<div class="modal-body"><i class="pull-left fa fa-4x '+(ajaxresult.message.errno ? 'fa-info-circle' : 'fa-check-circle')+'"></i><div class="pull-left"><p>'+ajaxresult.message.message+'</p></div><div class="clearfix"></div></div>');
+			} catch (error) {
+				modalobj.find('.modal-body').html(data);
+			}
 			$('form.ajaxfrom').each(function(){
 				$(this).attr('action', $(this).attr('action') + '&isajax=1&target=formtarget');
 				$(this).attr('target', '_formtarget');
-			})
+			});
 		});
-		modalobj.on('hidden.bs.modal', function(){modalobj.remove();});
+		modalobj.on('hidden.bs.modal', function(){
+			if (ajaxresult && ajaxresult.redirect) {
+				location.href = ajaxresult.redirect;
+				return false;
+			}
+			modalobj.remove();
+		});
 		if (typeof events['confirm'] == 'function') {
 			modalobj.find('.confirm', modalobj).on('click', events['confirm']);
 		}
@@ -676,33 +747,10 @@
 		}
 	};//end cookie
 
-	util.wechat_audio = function(val, callback, options) {
-		var opts = {
-			type :'voice',
-			direct : false,
-			multiple : false,
-			path : '',
-			dest_dir : ''
-		};
-		if(val){
-			opts.path = val;
-		}
-		opts = $.extend({}, opts, options);
-		require(['jquery', 'wechatFileUploader'], function($, wechatFileUploader){
-			wechatFileUploader.show(function(audios){
-				if(audios){
-					if($.isFunction(callback)){
-						callback(audios);
-					}
-				}
-			}, opts);
-		});
-	};
-
 	util.coupon = function(callback, options) {
 		var opts = {
 			type :'all',
-			multiple : false
+			multiple :true 
 		};
 		opts = $.extend({}, opts, options);
 		require(['jquery', 'coupon'], function($, coupon){
@@ -733,6 +781,25 @@
 			}, opts);
 		});
 	};
+
+    util.encrypt = function (str) {
+        str = $.trim(str);
+        if (typeof str == 'string' && str.length > 3) {
+            var reg = /^./;
+            var start = reg.exec(str);
+            var reg = /.$/;
+            var end = reg.exec(str)[0];
+            var content = '';
+            for (var i =0;i < str.length -2 ;i++) {
+                content += '*';
+            }
+            str = start + content + end;
+            return str;
+        } else {
+            return str;
+        }
+    };
+
 	if (typeof define === "function" && define.amd) {
 		define(['bootstrap'], function(){
 			return util;

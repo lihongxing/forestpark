@@ -102,7 +102,7 @@ class SiteController extends Controller
 
     public function actionMessage()
     {
-        Yii::info("info .... ","info");
-        MessageHelper::success('欢迎登陆小黑微信管理平台！',Url::toRoute("/wechat/account/display"));
+        Yii::info("info .... ", "info");
+        MessageHelper::success('欢迎登陆小黑微信管理平台！', Url::toRoute("/wechat/account/display"));
     }
 }

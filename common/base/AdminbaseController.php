@@ -14,6 +14,7 @@ class AdminbaseController extends BaseController
     private $_successWait = 2;
     //失败信息的跳转时间
     private $_errorWait = 3;
+
     /**
      * 操作错误跳转的快捷方法
      * @access protected
@@ -88,25 +89,26 @@ class AdminbaseController extends BaseController
             exit;
         }
     }
+
     function renderself($data)
     {
         extract($data);
-        include  realpath(dirname(__FILE__).'/../') . "/dispatch_jump.php";
+        include realpath(dirname(__FILE__) . '/../') . "/dispatch_jump.php";
     }
 
     public function beforeAction($action)
     {
-        if(parent::beforeAction($action)){
+        if (parent::beforeAction($action)) {
             $actionId = $action->getUniqueId();
             $user = Instance::ensure('user', User::className());
-            if(in_array($actionId, [
+            if (in_array($actionId, [
                 'rbac/user/login',
                 'rbac/user/logout',
                 'rbac/user/search',
                 'rbac/user/department-form',
                 'admin/site/welcome',
                 'admin/site/error',
-            ])){
+            ])) {
                 return true;
             }
             if ($user->getIsGuest()) {
@@ -115,15 +117,15 @@ class AdminbaseController extends BaseController
 
             if (Helper::checkRoute('/' . $actionId, Yii::$app->getRequest()->get(), $user)) {
                 return true;
-            }else{
-                if(Yii::$app->request->isAjax){
+            } else {
+                if (Yii::$app->request->isAjax) {
                     $this->ajaxReturn(json_encode(['status' => 403, 'message' => '对不起，您现在还没获此操作的权限']));
                     return false;
-                }else{
+                } else {
                     throw new ForbiddenHttpException('对不起，您现在还没获此操作的权限');
                 }
             }
-        }else{
+        } else {
             return false;
         }
 

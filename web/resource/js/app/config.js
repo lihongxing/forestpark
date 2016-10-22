@@ -23,6 +23,7 @@ require.config({
 		'kindeditor.main':'../../components/kindeditor/kindeditor-min',
 		'css': '../lib/css.min',
 		'webuploader' : '../../components/webuploader/webuploader.min',
+		'fileUploader' : '../../components/fileuploader/fileuploader.min',
 		'json2' : '../lib/json2',
 		'wapeditor' : './wapeditor',
 		'jquery.wookmark': '../lib/jquery.wookmark.min',
@@ -31,6 +32,8 @@ require.config({
 		'clockpicker': '../../components/clockpicker/clockpicker.min',
 		'jquery.qrcode': '../lib/jquery.qrcode.min',
 		'raty': '../lib/raty.min',
+		'district' : '../lib/district',
+		'hammer': '../lib/hammer.min',
 		'wechat': '../../../wechat/dist/wechat.min',
 		'dialog': '../../components/artDialog/dist/dialog-min',
 		'validation': '../../components/jqueryvalidation/dist/jquery.validate',
@@ -96,8 +99,8 @@ require.config({
 		'json2': {
 			exports: 'JSON'
 		},
-		'webuploader': {
-			deps: ['css!../../components/webuploader/webuploader.css', 'css!../../components/webuploader/style.css']
+		'fileUploader': {
+			deps: ['webuploader', 'css!../../components/webuploader/webuploader.css', 'css!../../components/webuploader/style.css']
 		},
 		'wapeditor' : {
 			exports : 'angular',
@@ -112,7 +115,7 @@ require.config({
 			deps: ['bootstrap']
 		},
 		'select2': {
-			deps: ['css!../../components/select2/select2.min.css', '/resource/components/select2/select2.min.js']
+			deps: ['css!../../components/select2/select2.min.css', './resource/components/select2/select2.min.js']
 		},
 		'clockpicker': {
 			exports: "$",
@@ -121,6 +124,13 @@ require.config({
 		'jquery.qrcode': {
 			exports: "$",
 			deps: ['jquery']
+		},
+		'district' : {
+			exports : "$",
+			deps : ['jquery']
+		},
+		'hammer' : {
+			exports : 'hammer'
 		},
 		'wechat': {
 			exports: "$",

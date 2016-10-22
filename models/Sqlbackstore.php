@@ -30,6 +30,7 @@ class Sqlbackstore extends \yii\db\ActiveRecord
         }
         return $this->_path;
     }
+
     /**
      * @inheritdoc
      */
@@ -65,8 +66,6 @@ class Sqlbackstore extends \yii\db\ActiveRecord
             'sql_size' => '数据库备份的文件大小',
         ];
     }
-
-
 
 
     /**
@@ -106,8 +105,8 @@ class Sqlbackstore extends \yii\db\ActiveRecord
             }
             $sqlbackstore = $this->find()->where($condition, $params)->one();
             if (isset($sqlbackstore->sql_name)) {
-                $sqlFile = $this-> path . basename($sqlbackstore->sql_name);
-                if (!file_exists($sqlFile)){
+                $sqlFile = $this->path . basename($sqlbackstore->sql_name);
+                if (!file_exists($sqlFile)) {
                     return array(false, 'function deleteByWhere file is not exit error');
                 }
             } else {

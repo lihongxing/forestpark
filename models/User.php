@@ -1,27 +1,31 @@
 <?php
 namespace app\models;
+
 use Yii;
 use yii\web\IdentityInterface;
 use yii\db\ActiveRecord;
 use app\common\core\StringHelper;
 use yii\data\Pagination;
-class User  extends ActiveRecord implements IdentityInterface
+
+class User extends ActiveRecord implements IdentityInterface
 {
 
     public static function tableName()
     {
         return '{{%users}}';
     }
+
     public function rules()
     {
         return [
-        [['u_name', 'u_pass','u_phone','u_login_num','u_login_time','u_old_login_time','u_login_ip','u_old_login_ip'], 'required'],
-        [['u_name'], 'string'],
-        [['u_pass'], 'string', 'max' => 128],
-        [['u_phone'], 'string', 'max' => 32],
+            [['u_name', 'u_pass', 'u_phone', 'u_login_num', 'u_login_time', 'u_old_login_time', 'u_login_ip', 'u_old_login_ip'], 'required'],
+            [['u_name'], 'string'],
+            [['u_pass'], 'string', 'max' => 128],
+            [['u_phone'], 'string', 'max' => 32],
         ];
-            
+
     }
+
     public function attributeLabels()
     {
         return [
@@ -52,7 +56,7 @@ class User  extends ActiveRecord implements IdentityInterface
             'u_proid' => '省份id',
         ];
     }
-    
+
     /**
      * 根据用户id返回用户信息
      * @param Int $id
@@ -61,6 +65,7 @@ class User  extends ActiveRecord implements IdentityInterface
     {
         return static::findOne($id);
     }
+
     /**
      * 根据用户token返回用户信息
      * @param $token
@@ -70,6 +75,7 @@ class User  extends ActiveRecord implements IdentityInterface
     {
         return static::findOne(['access_token' => $token]);
     }
+
     /**
      * 根据公司名返回用户信息
      * @param $username
@@ -77,15 +83,15 @@ class User  extends ActiveRecord implements IdentityInterface
     public static function findByCompanyname($companyname)
     {
         $user = User::find()
-        ->where(['companyname' => $companyname])
-        ->asArray()
-        ->one();
-        if($user){
+            ->where(['companyname' => $companyname])
+            ->asArray()
+            ->one();
+        if ($user) {
             return new static($user);
         }
         return null;
     }
-    
+
     /**
      * 根据用户名返回用户信息
      * @param $username
@@ -93,10 +99,10 @@ class User  extends ActiveRecord implements IdentityInterface
     public static function findByUsername($username)
     {
         $user = User::find()
-        ->where(['username' => $username])
-        ->asArray()
-        ->one();
-        if($user){
+            ->where(['username' => $username])
+            ->asArray()
+            ->one();
+        if ($user) {
             return new static($user);
         }
         return null;
@@ -107,26 +113,27 @@ class User  extends ActiveRecord implements IdentityInterface
     public static function findByUsernum($username)
     {
         $user = User::find()
-        ->where(['username' => $username])
-        ->asArray()
-        ->one();
-        if($user){
+            ->where(['username' => $username])
+            ->asArray()
+            ->one();
+        if ($user) {
             return new static($user);
         }
         return null;
     }
-    
+
     public static function findByEmail($email)
     {
         $user = User::find()
-        ->where(['email' => $email])
-        ->asArray()
-        ->one();
-        if($user){
+            ->where(['email' => $email])
+            ->asArray()
+            ->one();
+        if ($user) {
             return new static($user);
         }
         return null;
     }
+
     /**
      * 获取用户id
      * @see \yii\web\IdentityInterface::getId()
@@ -135,6 +142,7 @@ class User  extends ActiveRecord implements IdentityInterface
     {
         return $this->id;
     }
+
     /**
      * 获取用户authKey
      * @see \yii\web\IdentityInterface::getAuthKey()
@@ -143,6 +151,7 @@ class User  extends ActiveRecord implements IdentityInterface
     {
         return $this->authKey;
     }
+
     /**
      * 验证用户授权
      * @see \yii\web\IdentityInterface::validateAuthKey()
@@ -151,6 +160,7 @@ class User  extends ActiveRecord implements IdentityInterface
     {
         return $this->authKey === $authKey;
     }
+
     /**
      * 验证用户密码
      * @param $password
@@ -160,6 +170,7 @@ class User  extends ActiveRecord implements IdentityInterface
         return \yii::$app->security->validatePassword($password, $this->password);
         //return $this->password === $password;
     }
+
     /**
      * 用户信息修改
      * @param array $regesterdata
@@ -168,15 +179,15 @@ class User  extends ActiveRecord implements IdentityInterface
     public function useredit($regesterdata)
     {
         $products = '';
-        foreach($regesterdata['field_products'] as $product){
-            if(!empty($product)&&$product!=""){
-                $products = $products.$product.'|';
+        foreach ($regesterdata['field_products'] as $product) {
+            if (!empty($product) && $product != "") {
+                $products = $products . $product . '|';
             }
         }
         $brands = '';
-        foreach($regesterdata['field_brands'] as $brand){
-            if(!empty($brand)&&$brand!=""){
-                $brands = $brands.$brand.'|';
+        foreach ($regesterdata['field_brands'] as $brand) {
+            if (!empty($brand) && $brand != "") {
+                $brands = $brands . $brand . '|';
             }
         }
         $attributes = array(
@@ -184,22 +195,23 @@ class User  extends ActiveRecord implements IdentityInterface
             'country' => $regesterdata['field_country'],
             'speciality' => $regesterdata['field_speciality'],
             'facility' => $regesterdata['field_facility'],
-            'products' => substr($products, 0 ,strlen($products)-1),
-            'brands' => substr($brands, 0 ,strlen($brands)-1),
+            'products' => substr($products, 0, strlen($products) - 1),
+            'brands' => substr($brands, 0, strlen($brands) - 1),
             'password' => Yii::$app->security->generatePasswordHash($regesterdata['field_password']),
         );
         $condition = 'id=:id';
-      
+
         $params = array(
             ':id' => $regesterdata['uid']
         );
         $count = $this->updateAll($attributes, $condition, $params);
-        if($count>0){
+        if ($count > 0) {
             return 100;
-        }else{
+        } else {
             return 101;
         }
     }
+
     /**
      * 密码加密并设置到模型
      */
@@ -207,7 +219,7 @@ class User  extends ActiveRecord implements IdentityInterface
     {
         $this->password = Yii::$app->security->generatePasswordHash($password);
     }
-    
+
     /**
      * AuthKey加密并设置到模型
      */
@@ -215,6 +227,7 @@ class User  extends ActiveRecord implements IdentityInterface
     {
         return Yii::$app->security->generateRandomString();
     }
+
     /**
      * 重置密码
      */
@@ -222,7 +235,7 @@ class User  extends ActiveRecord implements IdentityInterface
     {
         //判断用户名邮箱是否存在
         $attributes = array(
-            'password' =>  Yii::$app->security->generatePasswordHash($password),
+            'password' => Yii::$app->security->generatePasswordHash($password),
             'validekeystate' => 1
         );
         $condition = 'validekey=:validekey';
@@ -230,12 +243,13 @@ class User  extends ActiveRecord implements IdentityInterface
             ':validekey' => $valitekey
         );
         $count = $this->updateAll($attributes, $condition, $params);
-        if($count> 0){
+        if ($count > 0) {
             return "100";
-        }else{
-            return "101"; 
+        } else {
+            return "101";
         }
     }
+
     /**
      * 用户邮箱激活
      * @param 用户id
@@ -251,80 +265,80 @@ class User  extends ActiveRecord implements IdentityInterface
             ':id' => $id
         );
         $count = $this->updateAll($attributes, $condition, $params);
-        if($count>0){
+        if ($count > 0) {
             return 100;
-        }else{
+        } else {
             return 101;
         }
     }
-    
+
     public function getUserlistAdmin($flag, $content)
     {
-        if($flag=='all'){
-            $query =$this->find()->orderBy("cast(u_id as unsigned) desc");
-        }else if($flag=='1'){
-            $query =$this->find()->where(array('email'=>$content));
-        }
-        else if($flag=='2'){
-            $query =$this->find()->where(array('companyname'=>$content));
-        }
-        else if($flag=='3'){
-            $query =$this->find()->where(array('username'=>$content));
-        }
-        else if($flag=='4'){
-            $query =$this->find()->where(array('telephone'=>$content));
-        }else{
-            $query =$this->find()->orderBy("cast(u_id as unsigned) desc");
+        if ($flag == 'all') {
+            $query = $this->find()->orderBy("cast(u_id as unsigned) desc");
+        } else if ($flag == '1') {
+            $query = $this->find()->where(array('email' => $content));
+        } else if ($flag == '2') {
+            $query = $this->find()->where(array('companyname' => $content));
+        } else if ($flag == '3') {
+            $query = $this->find()->where(array('username' => $content));
+        } else if ($flag == '4') {
+            $query = $this->find()->where(array('telephone' => $content));
+        } else {
+            $query = $this->find()->orderBy("cast(u_id as unsigned) desc");
         }
         $countQuery = clone $query;
-        $pages = new Pagination(['defaultPageSize' =>10,'totalCount' => $countQuery->count()]);
+        $pages = new Pagination(['defaultPageSize' => 10, 'totalCount' => $countQuery->count()]);
         $users = $query->offset($pages->offset)->limit($pages->limit)->all();
         return array(
-            'pages'=>$pages,
-            'users'=>$users
+            'pages' => $pages,
+            'users' => $users
         );
     }
-     /**
+
+    /**
      * 用户注册
      * @param 用户注册表单提交数据
      * @return 返回插入用户详细信息 ,以及注册状态100：成功,101,102:失败
      */
-    public function registeradd($regesterdata){
-        $this->setAttribute('id','');
-        $this->setAttribute('countlogin','0');
+    public function registeradd($regesterdata)
+    {
+        $this->setAttribute('id', '');
+        $this->setAttribute('countlogin', '0');
         $this->setAttribute('username', $regesterdata['field_first_name']);
         $this->setAttribute('email', $regesterdata['email']);
         $this->setAttribute('telephone', $regesterdata['field_telephone']);
         $this->setAttribute('country', $regesterdata['field_country']);
-        $this->setAttribute('status', 1); 
+        $this->setAttribute('status', 1);
         $this->setPassword(strtolower($regesterdata['field_password']));
-        $this->setAttribute('authKey',$this->generateAuthKey());
+        $this->setAttribute('authKey', $this->generateAuthKey());
         //生成随机码
         $time = time();
-        $randomcode =  StringHelper::randString(10);
-        $randomcode = md5($randomcode.$time.$regesterdata['field_first_name']);
-        $this->setAttribute('randomcode',$randomcode);
+        $randomcode = StringHelper::randString(10);
+        $randomcode = md5($randomcode . $time . $regesterdata['field_first_name']);
+        $this->setAttribute('randomcode', $randomcode);
         $this->setAttribute('companyname', $regesterdata['field_companyname']);
         $this->setAttribute('committee', $regesterdata['field_committee']);
         $this->setAttribute('associationduties', $regesterdata['field_associationduties']);
         $this->setAttribute('branchduties', $regesterdata['field_branchduties']);
         $this->setAttribute('addtime', $regesterdata['field_addtime']);
-        if($this->validate()){
-            if($this->save()){
+        if ($this->validate()) {
+            if ($this->save()) {
                 return array(
                     'status' => '100'
                 );
-            }else{
+            } else {
                 return array(
                     'status' => '102'
                 );
             }
-        }else{
+        } else {
             return array(
                 'status' => '101'
             );
         }
     }
+
     public function resetPasswordStep1($emailname, $validekey, $passoword)
     {
         $condition = 'email=:email';
@@ -337,9 +351,9 @@ class User  extends ActiveRecord implements IdentityInterface
             'tmppassword' => $passoword
         );
         $count = $this->updateAll($attributes, $condition, $params);
-        if($count>0){
+        if ($count > 0) {
             return 100;
-        }else{
+        } else {
             return 101;
         }
     }

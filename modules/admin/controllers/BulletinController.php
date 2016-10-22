@@ -83,7 +83,7 @@ class BulletinController extends AdminbaseController
                         'mes_issuer' => $post['Bulletin']['bul_issuer'],
                         'mes_sourse_id' => 'bulletin_'.$post['bul_id'],
                         'mes_template' => 'bulletin_issuer',
-                        'module' => 'bulletin',
+                        'mes_module' => 'bulletin',
                         'mes_flag' => 1,
                         'mes_class' => 1,
                     ];
@@ -95,7 +95,7 @@ class BulletinController extends AdminbaseController
                         'mes_issuer' => $post['Bulletin']['bul_issuer'],
                         'mes_sourse_id' => 'bulletin_'.$post['bul_id'],
                         'mes_template' => 'bulletin_release',
-                        'module' => 'bulletin',
+                        'mes_module' => 'bulletin',
                         'mes_flag' => 2,
                         'mes_class' => 2,
                     ];
@@ -119,7 +119,7 @@ class BulletinController extends AdminbaseController
                 $Bulletin->setAttribute('bul_undertakingunit', $post['Bulletin']['bul_undertakingunit']);
                 $Bulletin->setAttribute('bul_content', $post['Bulletin']['bul_content']);
                 $Bulletin->setAttribute('bul_releaseuser', $post['Bulletin']['bul_releaseuser']);
-                $Bulletin->setAttribute('bul_issuer', $post['Bulletin']['bul_issuer']);
+                $Bulletin->setAttribute('bul_issuer', json_encode($post['Bulletin']['bul_issuer']));
                 $Bulletin->setAttribute('bul_number', date("Y").'〔'.sprintf("%04d", $count+1).'〕');
                 $Bulletin->setAttribute('bul_addtime', $post['Bulletin']['bul_addtime']);
                 if ($Bulletin->save()) {
@@ -131,7 +131,7 @@ class BulletinController extends AdminbaseController
                         'mes_sourse_id' => 'bulletin_'.$Bulletin->primaryKey,
                         'mes_flag' => 1,
                         'mes_template' => 'bulletin_issuer',
-                        'module' => 'bulletin',
+                        'mes_module' => 'bulletin',
                         'mes_class' => 1,
                     ];
                     Message::create($mes_data, 1);
@@ -143,7 +143,7 @@ class BulletinController extends AdminbaseController
                         'mes_sourse_id' => 'bulletin_'.$Bulletin->primaryKey,
                         'mes_flag' => 2,
                         'mes_template' => 'bulletin_release',
-                        'module' => 'bulletin',
+                        'mes_module' => 'bulletin',
                         'mes_class' => 2,
                     ];
                     Message::create($mes_data, 1);
@@ -160,26 +160,26 @@ class BulletinController extends AdminbaseController
                 ->where(array('bul_id' => $bul_id))
                 ->asArray()
                 ->one();
+            $Usermodel = new User();
             if(!empty($bulletininfo)){
                 //获取当前通知通告的发布人签发人信息
-                $usermodel = new User();
-                $issuer = $usermodel->find()
+                $issuer = $Usermodel->find()
                     ->select(['id','username','head_img'])
                     ->where(array('id' => $bulletininfo['bul_issuer']))
                     ->asArray()
                     ->one();
-                $releaseuser = $usermodel->find()
-                    ->select(['id','username','head_img'])
-                    ->where(array('id' => $bulletininfo['bul_releaseuser']))
-                    ->asArray()
-                    ->one();
             }
-
+            $releaseuser = $Usermodel->find()
+                ->select(['id','username','head_img'])
+                ->where(array('id' => yii::$app->user->id))
+                ->asArray()
+                ->one();
+            //获取发布通知通报的审核人员信息
+            $issuers = $Usermodel->getSameDepartmentIssuerByUser(yii::$app->user->id);
             return $this->render('bulletinform', [
                 'Bulletin' => $bulletininfo,
-                'issuer' => $issuer,
+                'issuers' => $issuers,
                 'releaseuser' => $releaseuser
-
             ]);
         }
     }
@@ -259,28 +259,33 @@ class BulletinController extends AdminbaseController
             ->where(['bul_id' => $bul_id])
             ->asArray()
             ->one();
-        if($bulletininfo['bul_issuer'] == yii::$app->user->id){
+        $bulletininfo['bul_issuer'] = json_decode($bulletininfo['bul_issuer']);
+        if(in_array(yii::$app->user->id, $bulletininfo['bul_issuer'])){
             if(!empty($bul_id)){
-                $attributes = ['bul_isexamine' => $status == 'true' ? 2 : 3, 'bul_examinetime' => time()] ;
+                $attributes = [
+                    'bul_isexamine' => $status == 'true' ? 2 : 3,
+                    'bul_examinetime' => time(),
+                    'bul_examine_user' => yii::$app->user->id
+                ];
                 $condition = "bul_id=:bul_id";
                 $params = [':bul_id' => $bul_id];
                 $count = $Bulletin->updateAll($attributes, $condition, $params);
                 if($count > 0){
                     //修改审核消息的状态
                     Message::updatestatus('bulletin_'.$bul_id, 'true', yii::$app->user->id, $bulletininfo['bul_releaseuser']);
-                    //添加审核通知
+                    //添加审核通知（发布人）
                     $mes_data = [
-                        'mes_title' =>$bulletininfo["bul_title"],
+                        'mes_title' => $bulletininfo["bul_title"],
                         'mes_release_user' => $bulletininfo['bul_releaseuser'],
                         'mes_issuer' => $bulletininfo['bul_issuer'],
                         'mes_sourse_id' => 'bulletin_'.$bulletininfo['bul_id'],
                         'mes_flag' => 3,
                         'mes_template' => 'bulletin_examinerelease',
-                        'module' => 'bulletin',
+                        'mes_module' => 'bulletin',
                         'mes_class' => 2,
                     ];
                     Message::create($mes_data, 1);
-                    //添加审核通知
+                    //添加审核通知（审核人）
                     $mes_data = [
                         'mes_title' =>$bulletininfo["bul_title"],
                         'mes_release_user' => $bulletininfo['bul_releaseuser'],
@@ -288,7 +293,7 @@ class BulletinController extends AdminbaseController
                         'mes_sourse_id' => 'bulletin_'.$bulletininfo['bul_id'],
                         'mes_flag' => 4,
                         'mes_template' => 'bulletin_examineissuer',
-                        'module' => 'bulletin',
+                        'mes_module' => 'bulletin',
                         'mes_class' => 2,
                     ];
                     Message::create($mes_data, 1);

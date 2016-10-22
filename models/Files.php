@@ -49,16 +49,18 @@ class Files extends \yii\db\ActiveRecord
             'uniacid' => '模块名称'
         ];
     }
-    
+
     /**
      * @保存图片到数据库
      * @param unknown $info
      */
-    public function saveImage($info){
-        $this->setattribute('filename',$info['filename']);
-        $this->setattribute('attachment',$info['attachment']);
-        $this->setattribute('type',$info['is_image']);
-        $this->setattribute('createtime',time());
+    public function saveImage($info)
+    {
+        $this->setattribute('filename', $info['filename']);
+        $this->setattribute('name', $info['name']);
+        $this->setattribute('attachment', $info['attachment']);
+        $this->setattribute('type', $info['type']);
+        $this->setattribute('createtime', time());
         $this->setattribute('uniacid', $info['uniacid']);
         $this->save(false);
     }

@@ -31,4 +31,8 @@ return [
 
     'bulletinadd' => '通知通报添加修改',
     'bulletinmanage' => '通知通报管理',
+    'videoplay' => '视屏播放',
+    'videoplaylist' => '视屏播放列表',
+    'videoplayadd' => '视屏播放添加修改',
+
 ];

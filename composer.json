@@ -1,52 +1,63 @@
 {
-  "name" : "lianqicms",
-  "description" : "Yii 2 Basic Project Template",
-  "require" : {
-    "php" : ">=5.4.0",
-    "yiisoft/yii2" : ">=2.0.5",
-    "yiisoft/yii2-bootstrap" : "*",
-    "yiisoft/yii2-swiftmailer" : "*",
-    "overtrue/wechat" : "~3.0",
+  "name": "lianqicms",
+  "description": "Yii 2 Basic Project Template",
+  "require": {
+    "php": ">=5.4.0",
+    "yiisoft/yii2": ">=2.0.5",
+    "yiisoft/yii2-bootstrap": "*",
+    "yiisoft/yii2-swiftmailer": "*",
+    "overtrue/wechat": "~3.0",
     "liyunfang/yii2-widget-linkpager": "^1.0",
     "moonlandsoft/yii2-phpexcel": "*",
     "yiisoft/yii2-redis": "^2.0"
   },
-  "require-dev" : {
-    "yiisoft/yii2-codeception" : "*",
-    "yiisoft/yii2-debug" : "*",
-    "yiisoft/yii2-gii" : "*",
-    "yiisoft/yii2-faker" : "*"
+  "require-dev": {
+    "yiisoft/yii2-codeception": "*",
+    "yiisoft/yii2-debug": "*",
+    "yiisoft/yii2-gii": "*",
+    "yiisoft/yii2-faker": "*"
   },
-  "license" : "BSD-3-Clause",
-  "keywords" : [ "yii2", "framework", "basic", "project template" ],
-  "extra" : {
-    "yii\\composer\\Installer::postCreateProject" : {
-      "setPermission" : [ {
-        "runtime" : "0777",
-        "web/assets" : "0777",
-        "yii" : "0755"
-      } ],
-      "generateCookieValidationKey" : [ "config/web.php" ]
+  "license": "BSD-3-Clause",
+  "keywords": [
+    "yii2",
+    "framework",
+    "basic",
+    "project template"
+  ],
+  "extra": {
+    "yii\\composer\\Installer::postCreateProject": {
+      "setPermission": [
+        {
+          "runtime": "0777",
+          "web/assets": "0777",
+          "yii": "0755"
+        }
+      ],
+      "generateCookieValidationKey": [
+        "config/web.php"
+      ]
     },
-    "asset-installer-paths" : {
-      "npm-asset-library" : "vendor/npm",
-      "bower-asset-library" : "vendor/bower"
+    "asset-installer-paths": {
+      "npm-asset-library": "vendor/npm",
+      "bower-asset-library": "vendor/bower"
     }
   },
-  "minimum-stability" : "stable",
-  "type" : "project",
-  "scripts" : {
-    "post-create-project-cmd" : [ "yii\\composer\\Installer::postCreateProject" ]
+  "minimum-stability": "stable",
+  "type": "project",
+  "scripts": {
+    "post-create-project-cmd": [
+      "yii\\composer\\Installer::postCreateProject"
+    ]
   },
-  "support" : {
-    "issues" : "https://github.com/yiisoft/yii2/issues?state=open",
-    "forum" : "http://www.yiiframework.com/forum/",
-    "wiki" : "http://www.yiiframework.com/wiki/",
-    "irc" : "irc://irc.freenode.net/yii",
-    "source" : "https://github.com/yiisoft/yii2"
+  "support": {
+    "issues": "https://github.com/yiisoft/yii2/issues?state=open",
+    "forum": "http://www.yiiframework.com/forum/",
+    "wiki": "http://www.yiiframework.com/wiki/",
+    "irc": "irc://irc.freenode.net/yii",
+    "source": "https://github.com/yiisoft/yii2"
   },
-  "config" : {
-    "process-timeout" : 1800
+  "config": {
+    "process-timeout": 1800
   },
-  "homepage" : "http://www.yiiframework.com/"
+  "homepage": "http://www.yiiframework.com/"
 }

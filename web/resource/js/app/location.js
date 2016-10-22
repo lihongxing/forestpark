@@ -1256,5 +1256,3 @@ define(['jquery'], function($){
 	};
 	return mod;
 });
-
-

@@ -37,21 +37,21 @@ class Upload extends \yii\db\ActiveRecord
             'uniacid' => '模块名称'
         ];
     }
-    
+
     /**
      * @保存图片到数据库
      * @param unknown $info
      */
     public function saveImage($info)
     {
-        $this->setattribute('filename',$info['filename']);
-        $this->setattribute('pic_addtime',time());
-        $this->setattribute('pic_path',$info['attachment']);
+        $this->setattribute('filename', $info['filename']);
+        $this->setattribute('pic_addtime', time());
+        $this->setattribute('pic_path', $info['attachment']);
         $this->setattribute('uniacid', $info['uniacid']);
         $count = $this->save(false);
-        if($count> 0 ){
+        if ($count > 0) {
             return 100;
-        }else{
+        } else {
             return 101;
         }
     }

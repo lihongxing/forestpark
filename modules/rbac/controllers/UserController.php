@@ -254,6 +254,7 @@ class UserController extends AdminbaseController
             'email' => $post['Signup']['email'],
             'department' => $post['Signup']['department'],
             'color' => $post['Signup']['color'],
+            'type' => $post['Signup']['type'],
         );
         if(yii::$app->request->isPost){
             if($user = $model->signup($signup)) {
@@ -506,6 +507,7 @@ class UserController extends AdminbaseController
                 'head_img' => $post['thumb'],
                 'department' => $post['department'],
                 'color' => $post['color'],
+                'type' => $post['type'],
                 'updated_at' => time()
             );
             $condition = 'id = :id';
@@ -651,8 +653,8 @@ class UserController extends AdminbaseController
                 ->all();
             if(!empty($users)){
                 $html = '
-                    <div style=\'max-height:500px;overflow:auto;min-width:850px;\'>
-                        <table class="table table-hover" style="min-width:850px;">
+                    <div style=\'max-height:500px;overflow:auto;min-width:590px;\'>
+                        <table class="table table-hover" style="min-width:590px;">
                             <tbody>';
                                 foreach($users as $key => $item){
                                     $html = $html.'
@@ -671,8 +673,8 @@ class UserController extends AdminbaseController
                 return $this->ajaxReturn($html);
             }else{
                 return $this->ajaxReturn('
-                    <div style=\'max-height:500px;overflow:auto;min-width:850px;\'>
-                        <table class="table table-hover" style="min-width:850px;">
+                    <div style=\'max-height:500px;overflow:auto;min-width:590px;\'>
+                        <table class="table table-hover" style="min-width:590px;">
                             <tbody>
                                <tr>
                                     <td colspan=\'4\' align=\'center\'>未找到用户</td>

@@ -17,8 +17,10 @@ $this->title = Yii::t('rbac-admin', 'Users');
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
-            <div class="panel panel-info">
-                <div class="panel-heading">筛选</div>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><?=Yii::t('rbac-admin', 'Users');?></h3>
+                </div>
                 <div class="panel-body">
                     <form id="form1" role="form" class="form-horizontal" method="get" action="<?=Url::toRoute('/rbac/user/index')?>">
                         <div class="form-group">
@@ -71,15 +73,7 @@ $this->title = Yii::t('rbac-admin', 'Users');
                                 <button class="btn btn-default" data-original-title="" title=""><i class="fa fa-search"></i> 搜索</button>
                             </div>
                         </div>
-                        <div class="form-group">
-                        </div>
                     </form>
-                </div>
-            </div>
-
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><?=Yii::t('rbac-admin', 'Users');?></h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">

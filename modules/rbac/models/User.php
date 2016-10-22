@@ -3,6 +3,7 @@
 namespace app\modules\rbac\models;
 
 use Yii;
+use yii\base\Arrayable;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -201,5 +202,41 @@ class User extends ActiveRecord implements IdentityInterface
             'created_at' => '创建时间',
             'status' => '状态',
         ];
+    }
+
+    /**
+     *
+     * 根据用户信息返回同一部门具有审核权限的账户（包括超级管理员）
+     * @param $uid：部门普通账户id
+     * @return Array 返回值包含超级管理员一级同部门审核账户
+     */
+    public function getSameDepartmentIssuerByUser($uid)
+    {
+        $releaseuser = $this->find()
+            ->where(['id' => $uid])
+            ->asArray()
+            ->one();
+        $usersmodel = $this->find();
+        if($releaseuser['username'] == 'admin'){
+            $usersmodel = $usersmodel->Where(['username' => 'admin']);
+        }else if($releaseuser['username'] != 'admin'){
+            $usersmodel = $usersmodel->where(['department' => $releaseuser['department']])
+                ->andWhere(['type' => 2])
+                ->orWhere(['username' => 'admin']);
+        }
+        $issuers = $usersmodel->asArray()
+            ->all();
+        return $issuers;
+
+    }
+
+    public function SuperAdministrator($select = "")
+    {
+        $userinfo = $this->find()
+            ->select($select ? $select : '*')
+            ->where(['username' => 'admin'])
+            ->asArray()
+            ->one();
+        return $userinfo;
     }
 }

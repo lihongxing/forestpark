@@ -7,7 +7,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <script src="/resource/js/lib/jquery-ui-1.10.3.min.js"></script>
 <script language="javascript" src="/api/nestable/jquery.nestable.js"></script>
 <link rel="stylesheet" href="/admin/plugins/colorpicker/bootstrap-colorpicker.min.css">
+<link rel="stylesheet" href="/admin/plugins/iCheck/all.css">
 <link rel="stylesheet" type="text/css" href="/api/nestable/nestable.css"/>
+
 <style>
     .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
         background-color: #ffffff;
@@ -98,6 +100,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <?= \xiaohei\widgetform\FormWidget::widget(['name' => 'thumb', 'type'=>'thumb', 'value' => '', 'default' => '', 'options' => array('width' => 400, 'extras' => array('text' => 'ng-model="entry.thumb" class = "form-control ignore"'),'module' => 'admin')]) ?>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="">部门账号的类型</label>
+                                    <div class="col-sm-10">
+                                        <label>
+                                            <input type="radio" name="Signup[type]" value='1' class="minimal-blue" checked > 普通管理员账号
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="Signup[type]" value="2" class="minimal-blue"> 审核管理员账号
+                                        </label>
+                                    </div>
+                                </div>
                             </div><!-- /.box-body -->
                             <div class="box-footer">
                                 <button class="btn btn-primary pull-right" type="submit">确认添加</button>
@@ -185,6 +198,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
 </section>
+<script src="/admin/plugins/iCheck/icheck.min.js"></script>
 <script src="/admin/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 <script type="text/javascript">
     $().ready(function () {
@@ -286,7 +300,10 @@ $this->params['breadcrumbs'][] = $this->title;
         });
     });
 
-
+    $('input[type="checkbox"].minimal-blue, input[type="radio"].minimal-blue').iCheck({
+        checkboxClass: 'icheckbox_minimal-blue',
+        radioClass: 'iradio_minimal-blue'
+    });
 </script>
 
 

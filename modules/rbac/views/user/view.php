@@ -1,9 +1,12 @@
 <?php
 $this->title = Yii::t('rbac-admin', 'Useredit');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('rbac-admin', 'Users'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <link rel="stylesheet" href="/admin/plugins/colorpicker/bootstrap-colorpicker.min.css">
 <link href="/api/bootstrapswitch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet">
 <script src="/api/bootstrapswitch/dist/js/bootstrap-switch.min.js"></script>
+<link rel="stylesheet" href="/admin/plugins/iCheck/all.css">
 <style>
     .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
         background-color: #ffffff;
@@ -12,6 +15,10 @@ $this->title = Yii::t('rbac-admin', 'Useredit');
         border-left-color: #f4f4f4;
         border-right-color: #f4f4f4;
         border-top-color: transparent;
+    }
+    .pull-right {
+        float: right;
+        margin-left: 10px;
     }
 </style>
 <section class="content">
@@ -79,6 +86,19 @@ $this->title = Yii::t('rbac-admin', 'Useredit');
                                         <?= \xiaohei\widgetform\FormWidget::widget(['name' => 'thumb','type' => 'thumb', 'value' => $user->head_img, 'default' => '', 'options' => array('width' => 400, 'extras' => array('text' => 'ng-model="entry.thumb" class = "form-control ignore"'),'module' => 'admin')]) ?>
                                     </div>
                                 </div>
+                                <?php if($user->username != 'admin'){?>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="">部门账号的类型</label>
+                                    <div class="col-sm-10">
+                                        <label>
+                                            <input type="radio" name="type" value='1' class="minimal-blue" <?php if($user->type == 1 ){echo 'checked';}?> > 普通管理员账号
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="type" value="2" <?php if($user->type == 2 ){echo 'checked';}?> class="minimal-blue"> 审核管理员账号
+                                        </label>
+                                    </div>
+                                </div>
+                                <?php }?>
                             </div><!-- /.box-body -->
                             <div class="box-footer">
                                 <button class="btn btn-primary pull-right" type="submit">确认修改</button>
@@ -99,7 +119,6 @@ $this->title = Yii::t('rbac-admin', 'Useredit');
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label" for="inputPassword">确认密码</label>
-
                                     <div class="col-sm-10">
                                         <input type="password" name="ResetPassword[retypePassword]" placeholder="请再次输入新密码" id="password2"
                                                class="form-control">
@@ -159,7 +178,6 @@ $this->title = Yii::t('rbac-admin', 'Useredit');
 
             $("#administratorsupdata").validate({
                 ignore: ".ignore",
-
                 rules: {
                     "username": {
                         required: true,
@@ -195,7 +213,9 @@ $this->title = Yii::t('rbac-admin', 'Useredit');
                 errorClass: "has-error",
             });
         });
-
-
+    });
+    $('input[type="checkbox"].minimal-blue, input[type="radio"].minimal-blue').iCheck({
+        checkboxClass: 'icheckbox_minimal-blue',
+        radioClass: 'iradio_minimal-blue'
     });
 </script>
